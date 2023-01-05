@@ -1,13 +1,13 @@
 <link rel="stylesheet" href="/css/formStyles.css">
 
-<form action="create-user" method="post">
+<form action="/create-user" method="post">
 
     <h1>Sign Up</h1>
 
-    <input type="text" name="username" placeholder="User Name">
-    <input type="email" name="email" placeholder="User email ID">
-    <input type="password" name="password" placeholder="Enter Password">
-    <input type="text" name="confirm-password" placeholder="Confirm Your Password">
+    <input type="text" name="username" placeholder="User Name" required>
+    <input type="email" name="email" placeholder="User email ID" required>
+    <input type="password" name="password" placeholder="Enter Password" required>
+    <input type="password" name="confirmPassword" placeholder="Confirm Your Password" required>
 
     <input type="submit" value="Sign Up">
 </form>

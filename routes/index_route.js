@@ -9,7 +9,8 @@ router.get("/", controller.homeController);
 router.get("/profile", controller.profileController);
 router.get("/sign-up", controller.signUpController);
 router.get("/sign-in", controller.signInController);
-
+router.post("/create-user", controller.createUser);
+router.post("/create-session", controller.createSession);
 
 
 module.exports = router;
