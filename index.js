@@ -8,6 +8,10 @@ const ejsLayouts = require("express-ejs-layouts");
 // importing routes
 const routes = require("./routes/index_route");
 
+// DB related imports
+const dbConnection = require("./config/mongoConnect");
+const User = require("./models/user");
+
 const app = express();
 
 app.set("view engine", "ejs");
