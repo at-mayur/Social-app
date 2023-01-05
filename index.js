@@ -2,8 +2,17 @@
 const express = require("express");
 const port = 8000;
 
+// importing routes
+const routes = require("./routes/index_route");
 
 const app = express();
+
+app.set("view engine", "ejs");
+app.set("Views", "./Views");
+
+app.use(express.static("./Views/Static"));
+
+app.use("/", routes);
 
 
 app.listen(port, function(error){
