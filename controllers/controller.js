@@ -55,8 +55,10 @@ function createSession(request, response){
             return response.redirect("back");
         }
         if(user.password==request.body.password){
-            // console.log(user);
-            response.cookie.currUser = user._id;
+            response.cookie("currUser", user._id,{
+                maxAge: 1*60*1000,
+                signed: true
+            });
             gotLogin = true;
             return response.redirect("/profile");
         }

@@ -1,6 +1,8 @@
 // importing express and declaring port
 const express = require("express");
 const port = 8000;
+//importing cookie parser
+const cookieParser = require("cookie-parser");
 
 // importing layouts module
 const ejsLayouts = require("express-ejs-layouts");
@@ -22,6 +24,8 @@ app.set("layout extractStyles", true);
 app.set("layout extractScripts", true);
 
 app.use(express.urlencoded());
+
+app.use(cookieParser("myEncryptKey"));
 
 app.use(ejsLayouts);
 
