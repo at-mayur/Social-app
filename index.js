@@ -17,6 +17,9 @@ const localStrategy = require("./config/passportAuth");
 const passport = require("passport");
 const expSession = require("express-session");
 
+// importing mongo store to store session permanantly
+const MongoStore = require("connect-mongo");
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -39,7 +42,12 @@ app.use(expSession({
     saveUninitialized: false,
     cookie: {
         maxAge: 1000*60*5
-    }
+    },
+    // using mongo store here to store session in db to avoid session loss on server restart
+    store: MongoStore.create({
+        mongoUrl: "mongodb://localhost",
+        stringify: false
+    })
 }));
 
 app.use(passport.initialize());
