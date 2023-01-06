@@ -1,4 +1,5 @@
 
+
 function homeController(request, response){
     return response.render("home");
 }
@@ -8,16 +9,16 @@ function profileController(request, response){
 }
 
 function signUpController(request, response){
-    console.log(request.body);
     return response.render("signup");
 }
 
 function signInController(request, response){
-    console.log(request.body);
     return response.render("signin");
 }
 
-
+function createSession(request, response){
+    return response.redirect("/profile");
+}
 
 
 module.exports = {
@@ -25,6 +26,5 @@ module.exports = {
     profileController: profileController,
     signUpController: signUpController,
     signInController: signInController,
-    createUser: createUser,
     createSession: createSession
 };

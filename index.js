@@ -13,7 +13,9 @@ const dbConnection = require("./config/mongoConnect");
 const User = require("./models/user");
 
 // importing passport
-const passport = require("./config/passportAuth");
+const localStrategy = require("./config/passportAuth");
+const passport = require("passport");
+const expSession = require("express-session");
 
 const app = express();
 
@@ -29,6 +31,21 @@ app.use(express.urlencoded());
 app.use(ejsLayouts);
 
 app.use(express.static("./Views/Static"));
+
+app.use(expSession({
+    name: 'currUser',
+    secret: 'myEncryption',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000*60*5
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(passport.setAuthenticatedUser);
 
 app.use("/", routes);
 

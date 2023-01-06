@@ -1,3 +1,5 @@
+const { response } = require("express");
+const { request } = require("http");
 const passport = require("passport");
 const passportLocal = require("passport-local");
 
@@ -44,6 +46,24 @@ passport.deserializeUser(function(id, done){
         return done(null, user);
     });
 });
+
+
+passport.checkAuthentication = function(request, response, next){
+    if(request.isAuthenticated()){
+        return next();
+    }
+
+    return response.redirect("/sign-in");
+};
+
+passport.setAuthenticatedUser = function(request, response, next){
+    if(request.isAuthenticated()){
+        response.locals.user = request.user;
+    }
+
+    next();
+};
+
 
 
 module.exports = passport;
