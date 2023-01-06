@@ -5,10 +5,12 @@
         <%- style %>
     </head>
     <body>
-        <%- include('./layouts/_header'); %>
+        <%- include('_header'); %>
 
-        <%- body %>
+        <main>
+            <%- body %>
+        </main>
 
-        <%- include('./layouts/_footer'); %>
+        <%- include('_footer'); %>
     </body>
 </html>

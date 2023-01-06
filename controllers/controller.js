@@ -1,19 +1,72 @@
 const User = require("../models/user");
 
 function homeController(request, response){
-    return response.render("home");
+    let userId = request.signedCookies.currUser;
+    if(userId){
+        User.findById(userId, function(error, user){
+            if(error){
+                console.log(`Sorry, Error fetching user..\n${error}`);
+                return response.redirect("back");
+            }
+            if(user){
+                return response.render("home", {
+                    user: user
+                });
+            }
+            
+        });
+    }
+    else{
+        return response.render("home");
+    }
 }
 
 function profileController(request, response){
-    return response.render("profile");
+    let userId = request.signedCookies.currUser;
+    if(userId){
+        User.findById(userId, function(error, user){
+            if(error){
+                console.log(`Sorry, Error fetching user..\n${error}`);
+                return response.redirect("back");
+            }
+            if(user){
+                response.cookie("currUser", userId,{
+                    maxAge: 1*60*1000,
+                    signed: true
+                });
+                return response.render("profile", {
+                    user: user
+                });
+            }
+            
+        });
+    }
+    else{
+        return response.redirect("/sign-in");
+    }
+    
 }
 
 function signUpController(request, response){
+    if(request.signedCookies.currUser){
+        return response.redirect("/profile");
+    }
     return response.render("signup");
 }
 
 function signInController(request, response){
+    if(request.signedCookies.currUser){
+        return response.redirect("/profile");
+    }
     return response.render("signin");
+}
+
+function signOutController(request, response){
+    let userId = request.signedCookies.currUser;
+    if(userId){
+        response.clearCookie("currUser");
+    }
+    return response.redirect("/");
 }
 
 function createUser(request, response){
@@ -76,6 +129,7 @@ module.exports = {
     profileController: profileController,
     signUpController: signUpController,
     signInController: signInController,
+    signOutController: signOutController,
     createUser: createUser,
     createSession: createSession
 };
