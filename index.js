@@ -12,6 +12,9 @@ const routes = require("./routes/index_route");
 const dbConnection = require("./config/mongoConnect");
 const User = require("./models/user");
 
+// importing passport
+const passport = require("./config/passportAuth");
+
 const app = express();
 
 app.set("view engine", "ejs");
