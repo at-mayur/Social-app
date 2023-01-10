@@ -1,5 +1,75 @@
+<link rel="stylesheet" href="/css/homeStyle.css">
+
+<div class="sub-body">
+    <div id="home-container">
+        <div id="post-container">
+            <h2 class="head">Timeline</h2>
+            <ul class="post-list">
+                <li>
+                    <div class="post">
+                        <h5>User Name</h5>
+                        <div id="post-body">
+                            <div id="post-content">
+                                <p>User Post</p>
+                            </div>
+                            <div id="post-comment">
+                                <% if(locals.user){ %>
+                                <form action="" method="post">
+                                    <input type="text" name="comment-data" placeholder="Add your comment here..">
+                                    <input type="hidden" name="post" value="<%=  %>">
+                                    <button type="submit">Post</button>
+                                </form>
+                                <% }else{ %>
+                                    <form action="" method="post">
+                                        <input type="text" name="comment-data" placeholder="Add your comment here.." disabled>
+                                        <input type="hidden" name="post" value="<%=  %>" disabled>
+                                        <button type="submit" disabled>Post</button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div id="comment-section">
+                        <h3 class="head">
+                            Comments
+                        </h3>
+                        <ul class="comment-list">
+                            <li>
+                                <div class="comment">
+                                    <h5>User Name</h5>
+                                    <p>User Post</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
 
-<h1>Home Page</h1>
+                </li>
+            </ul>
+            
+        </div>
+        
+        <div id="add-post-container">
+            <h2 class="head">Post..</h2>
+            <% if(locals.user){ %>
+            <form action="" method="post">
+                <textarea name="post-content" cols="30" rows="10"></textarea>
+                <button type="submit">Post</button>
+            </form>
+            <% }else{ %>
+            <form action="" method="post">
+                <textarea name="post-content" cols="30" rows="10" disabled></textarea>
+                <button type="submit" disabled>Post</button>
+            </form>
+            <% } %>
+        </div>
+    </div>
+</div>
 
+
+
+
+<script src="/scripts/homeScript.js"></script>
         

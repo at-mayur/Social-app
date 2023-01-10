@@ -1,3 +1,102 @@
 body{
     text-align: center;
 }
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(62, 97, 252);
+    height: 10%;
+    border-radius: 5px;
+    margin-bottom: 2%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+header h3{
+    color: white;
+}
+
+header div{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header ul{
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    height: 100%;
+}
+
+header ul li{
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 2px;
+}
+
+header ul li a{
+    text-decoration: none;
+    color: white;
+}
+
+header ul li:hover{
+    background-color: rgb(37, 60, 158);
+}
+
+footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(62, 97, 252);
+    height: 10%;
+    border-radius: 5px;
+    margin-bottom: 2%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+footer h3{
+    color: white;
+}
+
+footer div{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer ul{
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    height: 100%;
+}
+
+footer ul li{
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 2px;
+}
+
+footer ul li a{
+    text-decoration: none;
+    color: white;
+}
+
+footer ul li a i{
+    margin-right: 5px;
+}
+
+footer ul li:hover{
+    background-color: rgb(37, 60, 158);
+}
+
+.sub-body{
+    height: 70%;
+    margin-bottom: 2%;
+}

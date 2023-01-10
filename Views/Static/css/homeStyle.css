@@ -1,0 +1,126 @@
+#home-container{
+    width: 96%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+#post-container{
+    background-color: lightgrey;
+    width: 69%;
+    height: 100%;
+    border-radius: 10px;
+    position: relative;
+}
+
+#add-post-container{
+    background-color: lightgrey;
+    width: 30%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.head{
+    color: rgb(1, 1, 1);
+}
+
+.post-list{
+    list-style: none;
+    padding-left: 0;
+    box-sizing: border-box;
+    height: 82%;
+    overflow: scroll;
+}
+
+.post-list::-webkit-scrollbar{
+    display: none;
+}
+
+.post-list li{
+    margin: 0rem 0.2rem;
+    padding-bottom: 0.5rem;
+    text-align: start;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.post h5{
+    margin: 0;
+    padding: 0.4rem 0.4rem;
+    background-color: rgb(1, 1, 109);
+    color: white;
+    border-radius: 5px 5px 0 0;
+}
+
+.post p{
+    margin-left: 0.5rem;
+    margin-right: 0.2rem;
+}
+
+#post-body{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+#post-content{
+    width: 60%;
+}
+
+#post-comment{
+    width: 40%;
+}
+
+#post-comment input{
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+}
+
+#post-comment button{
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+}
+
+.comment-list{
+    list-style: none;
+    padding-left: 0;
+    box-sizing: border-box;
+}
+
+.comment-list li{
+    margin: 0rem 0.2rem;
+    padding: 0 0.2rem 0.4rem 0.4rem;
+    text-align: start;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.comment h5{
+    margin-bottom: 0;
+}
+
+.comment p{
+    margin-bottom: 0;
+    margin-top: 0.3rem;
+}
+
+
+#add-post-container{
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    box-sizing: border-box;
+    text-align: start;
+}
+
+#add-post-container textarea{
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+
+#add-post-container button{
+    padding: 0.3rem 0.5rem;
+}

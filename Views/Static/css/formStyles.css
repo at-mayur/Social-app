@@ -1,6 +1,6 @@
 form{
-    width: 50%;
-    height: 70%;
+    width: 60%;
+    height: 100%;
     margin: auto;
     padding: 1em;
     border-radius: 10px;
@@ -8,6 +8,7 @@ form{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 form input{
@@ -16,4 +17,5 @@ form input{
     padding: 5px;
     margin: 5px 0;
     outline: none;
+
 }
