@@ -4,6 +4,7 @@
     margin: auto;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 #post-container{
@@ -38,7 +39,7 @@
 }
 
 .post-list li{
-    margin: 0rem 0.2rem;
+    margin: 0.4rem 0.2rem;
     padding-bottom: 0.5rem;
     text-align: start;
     background-color: white;
@@ -63,6 +64,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    flex-wrap: wrap;
 }
 
 #post-content{
@@ -123,4 +125,26 @@
 
 #add-post-container button{
     padding: 0.3rem 0.5rem;
+}
+
+
+
+@media screen and (max-width: 700px) {
+    #post-container{
+        width: 100%;
+        margin-bottom: 2%;
+    }
+
+    #add-post-container{
+        width: 100%;
+    }
+
+    #post-content{
+        width: 100%;
+    }
+
+    #post-comment{
+        width: 100%;
+    }
+
 }

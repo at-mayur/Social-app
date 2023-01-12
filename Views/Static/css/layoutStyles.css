@@ -99,4 +99,9 @@ footer ul li:hover{
 .sub-body{
     height: 70%;
     margin-bottom: 2%;
+    overflow: scroll;
+}
+
+.sub-body::-webkit-scrollbar{
+    display: none;
 }

@@ -5,24 +5,26 @@
         <div id="post-container">
             <h2 class="head">Timeline</h2>
             <ul class="post-list">
+
+                <% for(let post of posts){ %>
                 <li>
                     <div class="post">
-                        <h5>User Name</h5>
+                        <h5><%= post.user.username %></h5>
                         <div id="post-body">
                             <div id="post-content">
-                                <p>User Post</p>
+                                <p><%= post.postContent %></p>
                             </div>
                             <div id="post-comment">
                                 <% if(locals.user){ %>
-                                <form action="" method="post">
-                                    <input type="text" name="comment-data" placeholder="Add your comment here..">
-                                    <input type="hidden" name="post" value="<%=  %>">
+                                <form action="/create-comment" method="post">
+                                    <input type="text" name="commentContent" placeholder="Add your comment here..">
+                                    <input type="hidden" name="post" value="<%= post._id %>">
                                     <button type="submit">Post</button>
                                 </form>
                                 <% }else{ %>
                                     <form action="" method="post">
                                         <input type="text" name="comment-data" placeholder="Add your comment here.." disabled>
-                                        <input type="hidden" name="post" value="<%=  %>" disabled>
+                                        <input type="hidden" name="post" value="<%= post._id %>" disabled>
                                         <button type="submit" disabled>Post</button>
                                     </form>
                                 <% } %>
@@ -36,17 +38,23 @@
                             Comments
                         </h3>
                         <ul class="comment-list">
+                            <% for(let comment of post.comments){ %>
                             <li>
                                 <div class="comment">
-                                    <h5>User Name</h5>
-                                    <p>User Post</p>
+                                    <h5><%= comment.user.username %></h5>
+                                    <p><%= comment.commentContent %></p>
                                 </div>
                             </li>
+                            <% } %>
                         </ul>
                     </div>
 
 
                 </li>
+
+
+                <% } %>
+
             </ul>
             
         </div>
@@ -54,8 +62,8 @@
         <div id="add-post-container">
             <h2 class="head">Post..</h2>
             <% if(locals.user){ %>
-            <form action="" method="post">
-                <textarea name="post-content" cols="30" rows="10"></textarea>
+            <form action="/create-post" method="post">
+                <textarea name="postContent" cols="30" rows="10"></textarea>
                 <button type="submit">Post</button>
             </form>
             <% }else{ %>

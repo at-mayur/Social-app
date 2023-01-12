@@ -1,13 +1,14 @@
 const express = require("express");
 const passport = require("passport");
 const localPassport = require("../config/passportAuth");
+const postRoute = require("./postCommentsRouter");
 
 //import controller
 const controller = require("../controllers/controller");
 
 const router = express.Router();
 
-router.get("/", controller.homeController);
+router.use("/", postRoute);
 router.get("/profile", localPassport.checkAuthentication, controller.profileController);
 router.get("/sign-up", controller.signUpController);
 router.get("/sign-in", controller.signInController);
