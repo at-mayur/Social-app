@@ -13,7 +13,7 @@ function homeController(request, response){
             return;
         }
 
-        response.render("home",{
+        return response.render("home",{
             title: "Home | Posts",
             posts: posts
         });
@@ -29,7 +29,7 @@ function profileController(request, response){
 
 function signUpController(request, response){
     if(request.isAuthenticated()){
-        return response.redirect("/profile");
+        return response.redirect("/");
     }
     return response.render("signup", {
         title: "User | Sign Up"
@@ -38,7 +38,7 @@ function signUpController(request, response){
 
 function signInController(request, response){
     if(request.isAuthenticated()){
-        return response.redirect("/profile");
+        return response.redirect("/");
     }
     return response.render("signin", {
         title: "User | Sign In"
@@ -46,7 +46,7 @@ function signInController(request, response){
 }
 
 function createSession(request, response){
-    return response.redirect("/profile");
+    return response.redirect("/");
 }
 
 function removeSession(request, response){

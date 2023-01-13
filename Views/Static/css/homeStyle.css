@@ -5,6 +5,7 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    box-sizing: border-box;
 }
 
 #post-container{
@@ -163,6 +164,29 @@
     padding: 0.3rem 0.5rem;
 }
 
+#add-post{
+    height: 40%;
+}
+
+#friend-list{
+    height: 60%;
+    overflow: scroll;
+}
+
+#friend-list::-webkit-scrollbar{
+    display: none;
+}
+
+#friend-list ul{
+    list-style: none;
+    padding-left: 0;
+}
+
+#friend-list ul li{
+    padding: 0.5rem 0.2rem;
+    margin: 0.2rem;
+    background-color: white;
+}
 
 
 @media screen and (max-width: 1000px) {
@@ -175,12 +199,12 @@
         width: 100%;
     }
 
-    #post-content{
-        width: 90%;
+    .post-content{
+        width: 100%;
     }
 
-    #post-comment{
-        width: 90%;
+    .post-comment{
+        width: 100%;
     }
 
 }

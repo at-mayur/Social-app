@@ -43,5 +43,46 @@ module.exports.createCommentController = function(request, response){
 };
 
 module.exports.deletePostController = function(request, response){
-    console.log(request.params);
+    // console.log(request.params);
+    Post.findById(request.params.id, function(error, post){
+        if(error){
+            console.log(`Error finding post from db..\n${error}`);
+            return;
+        }
+        if(request.user && request.user.id==post.user){
+            post.remove();
+
+            Comment.deleteMany({post: request.params.id}, function(error){
+                if(error){
+                    console.log(`Error deleting comments on that post..\n${error}`);
+                    return;
+                }
+            });
+        }
+    });
+    return response.redirect("back");
+};
+
+module.exports.deleteCommentController = function(request, response){
+    Comment.findById(request.params.id).populate("user post").exec(function(error, comment){
+        if(error){
+            console.log(`Error fetching Comment from DB..\n${error}`);
+            return;
+        }
+
+        if(request.user && (request.user.id==comment.user.id || request.user.id==comment.post.user)){
+            Post.findByIdAndUpdate(comment.post.id, { $pull: {'comments': comment.id}}, function(error, post){
+                if(error){
+                    console.log(`Error deleting comment from post Array..\n${error}`);
+                    return;
+                }
+
+                // console.log(post);
+            });
+
+            comment.remove();
+        }
+    });
+
+    return response.redirect("back");
 };
