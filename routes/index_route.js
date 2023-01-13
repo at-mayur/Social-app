@@ -8,11 +8,13 @@ const controller = require("../controllers/controller");
 
 const router = express.Router();
 
-router.use("/", postRoute);
+
+router.get("/", passport.checkAuthentication, controller.homeController);
 router.get("/profile", localPassport.checkAuthentication, controller.profileController);
 router.get("/sign-up", controller.signUpController);
 router.get("/sign-in", controller.signInController);
 router.get("/sign-out", controller.removeSession);
+router.use("/post", postRoute);
 
 router.post("/create-session", passport.authenticate('local', {
     failureRedirect: "/sign-in"

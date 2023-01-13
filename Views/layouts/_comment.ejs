@@ -1,0 +1,22 @@
+
+
+<h3 class="head">
+    Comments
+</h3>
+<ul class="comment-list">
+    <% for(let comment of post.comments){ %>
+    <li>
+        <div class="comment">
+            <h5><%= comment.user.username %></h5>
+            <p><%= comment.commentContent %></p>
+        </div>
+
+        <% if(locals.user && (locals.user.id==post.user.id || locals.user.id==comment.user.id)){ %>
+            <div class="comment-delete">
+                <a href=""><i class="fa-solid fa-trash-can"></i></a>
+            </div>
+        <% } %>
+        
+    </li>
+    <% } %>
+</ul>

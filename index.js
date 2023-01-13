@@ -44,7 +44,7 @@ app.use(expSession({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 1000*60*5
+        maxAge: 1000*60*10
     },
     // using mongo store here to store session in db to avoid session loss on server restart
     store: MongoStore.create({

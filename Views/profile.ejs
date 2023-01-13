@@ -1,7 +1,26 @@
 <link rel="stylesheet" href="/css/profileStyles.css">
 
+
 <div class="sub-body">
     <h1>Profile Page</h1>
+    <div id="profile-details">
+        <div class="user-details-section">
+            <h3>User Details</h3>
+            <% if(locals.user){ %>
+                <form action="" id="edit-user-form" class="">
+                    <input type="text" name="username" value="<%= user.username %>" disabled>
+                    <input type="email" name="email" value="<%= user.email %>" disabled>
+
+                    <input type="submit" value="Update Details" disabled >
+                </form>
+            <% } %>
+        </div>
+        <div class="edit-user">
+            <button type="button" id="write-pen" ><i class="fa-solid fa-pen"></i></button>
+            <button type="button" id="cancel-edit" disabled><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+    </div>
 </div>
 
-        
+  

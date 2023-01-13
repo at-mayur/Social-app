@@ -2,40 +2,6 @@ const Post = require("../models/post");
 const Comment = require("../models/comment");
 
 
-module.exports.postController = function(request, response){
-    Post.find({}).populate('user').populate({
-        path: 'comments',
-        populate: {
-            path: "user"
-        }
-    }).exec(function(error, posts){
-        if(error){
-            console.log(`Error fetching posts from DB..\n${error}`);
-            return;
-        }
-
-        response.render("home",{
-            title: "Home | Posts",
-            posts: posts
-        });
-    });
-
-
-
-    
-    // Post.find({}).populate("user").exec(function(error, posts){
-    //     if(error){
-    //         console.log(`Error fetching posts from Db..\n${error}`);
-    //         return;
-    //     }
-
-    //     response.render("home",{
-    //         title: "Home | Posts",
-    //         posts: posts
-    //     });
-    // });
-};
-
 module.exports.createPostController = function(request, response){
     Post.create({
         postContent: request.body.postContent,
@@ -60,7 +26,8 @@ module.exports.createCommentController = function(request, response){
 
         Comment.create({
             commentContent: request.body.commentContent,
-            user: request.user._id
+            user: request.user._id,
+            post: post._id
         }, function(error, comment){
             if(error){
                 console.log(`Error adding Comment to DB..\n${error}`);
@@ -73,4 +40,8 @@ module.exports.createCommentController = function(request, response){
             return response.redirect("back");
         });
     });
+};
+
+module.exports.deletePostController = function(request, response){
+    console.log(request.params);
 };

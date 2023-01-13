@@ -1,25 +1,48 @@
-
+const Post = require("../models/post");
+const Comment = require("../models/comment");
 
 function homeController(request, response){
-    return response.render("home");
+    Post.find({}).populate('user').populate({
+        path: 'comments',
+        populate: {
+            path: "user post"
+        }
+    }).exec(function(error, posts){
+        if(error){
+            console.log(`Error fetching posts from DB..\n${error}`);
+            return;
+        }
+
+        response.render("home",{
+            title: "Home | Posts",
+            posts: posts
+        });
+    });
+
 }
 
 function profileController(request, response){
-    return response.render("profile");
+    return response.render("profile", {
+        title: "User | Profile"
+    });
 }
 
 function signUpController(request, response){
     if(request.isAuthenticated()){
         return response.redirect("/profile");
     }
-    return response.render("signup");
+    return response.render("signup", {
+        title: "User | Sign Up"
+    });
 }
 
 function signInController(request, response){
     if(request.isAuthenticated()){
         return response.redirect("/profile");
     }
-    return response.render("signin");
+    return response.render("signin", {
+        title: "User | Sign In"
+    });
 }
 
 function createSession(request, response){

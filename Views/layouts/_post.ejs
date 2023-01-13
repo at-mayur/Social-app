@@ -1,0 +1,33 @@
+
+
+<h5><%= post.user.username %></h5>
+<div class="post-body">
+    <div class="post-content">
+        <p><%= post.postContent %></p>
+    </div>
+    <div class="post-comment">
+        <div class="comment-form">
+            <% if(locals.user){ %>
+                <form action="/post/create-comment" method="post">
+                    <input type="text" name="commentContent" placeholder="Add your comment here..">
+                    <input type="hidden" name="post" value="<%= post._id %>">
+                    <button type="submit">Post</button>
+                </form>
+            <% }else{ %>
+                <form action="/post/create-comment" method="post">
+                    <input type="text" name="comment-data" placeholder="Add your comment here.." disabled>
+                    <input type="hidden" name="post" value="<%= post._id %>" disabled>
+                    <button type="submit" disabled>Post</button>
+                </form>
+            <% } %>
+        </div>
+        
+    </div>
+
+</div>
+
+<% if(locals.user && locals.user.id==post.user.id){ %>
+    <div class="/post/post-delete/<%= post.id %>">
+        <a href=""><i class="fa-regular fa-trash-can"></i></a>
+    </div>
+<% } %>

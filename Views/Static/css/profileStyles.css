@@ -1,3 +1,57 @@
 body{
     background-color: lightgrey;
 }
+
+#profile-details{
+    width: 60%;
+    margin: auto;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2% 0;
+}
+
+.user-details-section{
+    width: 90%;
+}
+
+.edit-user{
+    width: 10%;
+    box-sizing: border-box;
+}
+
+.edit-user button{
+    display: block;
+    font-size: large;
+    border: none;
+    background: transparent;
+    color: navy;
+    text-decoration: none;
+    margin: 1rem 0;
+}
+
+.edit-user button:disabled{
+    color: grey;
+}
+
+
+#profile-details h3{
+    width: 100%;
+}
+
+#profile-details form{
+    margin: auto;
+    width: 90%;
+}
+
+#profile-details input{
+    display: block;
+    width: 100%;
+    font-size: large;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 5px;
+}
