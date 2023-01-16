@@ -4,6 +4,10 @@
         <link rel="stylesheet" href="/css/layoutStyles.css">
         <%- style %>
         <script src="https://kit.fontawesome.com/b3348ae33f.js" crossorigin="anonymous"></script>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+
     </head>
     <body>
         <%- include('./layouts/_header'); %>
@@ -14,5 +18,19 @@
 
 
         <%- script %>
+
+        <script>
+            <% if(locals.messages && messages.success.length > 0) { %>
+                new Noty({
+                    theme: 'relax',
+                    type: 'success',
+                    layout: 'topRight',
+                    text: '<%= messages.success %>',
+                    timeout: 2000,
+                    progressBar: true
+                }).show();
+            <% } %>
+        </script>
+            
     </body>
 </html>

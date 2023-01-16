@@ -1,9 +1,8 @@
 <link rel="stylesheet" href="/css/homeStyle.css">
 
+
 <div class="sub-body">
-    <% if(flash.success && flash.success.length>0){ %>
-        <p><%= flash.success %></p>
-    <% } %>
+    
     <div id="home-container">
         <div id="post-container">
             <h2 class="head">Timeline</h2>
@@ -37,7 +36,17 @@
 </div>
 
 
+<Script>
+    if(locals.messges.success && messages.length >0){
+        new Noty({
+            type: "success",
+            layout: "top-right",
+            text: messages.success
+
+        }).show();
+    }
+</Script>
 
 
-<script src="/scripts/homeScript.js"></script>
+
         

@@ -1,6 +1,7 @@
 
 module.exports.flashSet = function(request, response, next){
-    response.locals.flash = {
+    // console.log(request.flash('success'));
+    response.locals.messages = {
         'success': request.flash('success'),
         'error': request.flash('error')
     };

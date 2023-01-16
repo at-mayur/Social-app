@@ -16,6 +16,7 @@ const User = require("./models/user");
 const localStrategy = require("./config/passportAuth");
 const passport = require("passport");
 const expSession = require("express-session");
+const cookieParser = require("cookie-parser");
 
 // importing mongo store to store session permanantly
 const MongoStore = require("connect-mongo");
@@ -24,7 +25,7 @@ const MongoStore = require("connect-mongo");
 
 //Flash message
 const flash = require("connect-flash");
-const flashSet = require("./config/customMiddleWare");
+const customMware = require("./config/customMiddleWare");
 
 
 const app = express();
@@ -45,15 +46,16 @@ app.use(express.static("./Views/Static"));
 app.use(expSession({
     name: 'currUser',
     secret: 'myEncryption',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     cookie: {
         maxAge: 1000*60*10
     },
     // using mongo store here to store session in db to avoid session loss on server restart
     store: MongoStore.create({
         mongoUrl: "mongodb://localhost",
-        stringify: false
+        stringify: false,
+        autoRemove: false
     })
 }));
 
@@ -63,7 +65,7 @@ app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
 
 app.use(flash());
-app.use(flashSet.flashSet);
+app.use(customMware.flashSet);
 
 app.use("/", routes);
 

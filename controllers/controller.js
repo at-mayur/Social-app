@@ -14,7 +14,6 @@ async function homeController(request, response){
         });
 
         let users = await User.find({});
-
         return response.render("home",{
             title: "Home | Posts",
             posts: posts,
@@ -84,7 +83,6 @@ function signUpController(request, response){
 
 function signInController(request, response){
     if(request.isAuthenticated()){
-        request.flash('success', 'Logged In..');
         return response.redirect("/");
     }
     return response.render("signin", {
@@ -93,6 +91,7 @@ function signInController(request, response){
 }
 
 function createSession(request, response){
+    request.flash('success', 'Logged In..');
     return response.redirect("/");
 }
 
@@ -104,9 +103,8 @@ function removeSession(request, response){
         }
 
         request.flash('success', 'Logged out successfully..');
+        return response.redirect("/");
     });
-
-    return response.redirect("/sign-in");
 }
 
 async function createUser(request, response){
