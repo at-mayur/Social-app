@@ -7,20 +7,16 @@
                     Home
                 </a>
             </li>
+            <% if(locals.user){ %>
             <li>
-                <% if(locals.user){ %>
-                    <a href="/profile/<%= user.id %>">
-                        <i class="fa-regular fa-id-badge"></i>
-                        Profile
-                    </a>
-                <% }else{ %>
-                    <a href="/profile/">
-                        <i class="fa-regular fa-id-badge"></i>
-                        Profile
-                    </a>
-                <% } %>
+                
+                <a href="/profile/<%= user.id %>">
+                    <i class="fa-regular fa-id-badge"></i>
+                    Profile
+                </a>
                 
             </li>
+            <% } %>
         </ul>
     </div>
 </footer>

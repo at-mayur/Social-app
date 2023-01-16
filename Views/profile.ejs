@@ -6,21 +6,28 @@
     <div id="profile-details">
         <div class="user-details-section">
             <h3>User Details</h3>
-            <% if(locals.user){ %>
-                <form action="" id="edit-user-form" class="">
-                    <input type="text" name="username" value="<%= user.username %>" disabled>
-                    <input type="email" name="email" value="<%= user.email %>" disabled>
+            <% if(locals.user && profUser.id==user.id){ %>
+                <form method="post" action="/profile-update" id="edit-user-form" class="">
+                    <input type="text" name="username" value="<%= profUser.username %>" disabled>
+                    <input type="email" name="email" value="<%= profUser.email %>" disabled>
+                    <input type="hidden" name="userId" value="<%= profUser.id %>">
 
                     <input type="submit" value="Update Details" disabled >
                 </form>
+            <% }else{ %>
+                <input type="text" name="username" value="<%= profUser.username %>" disabled>
+                <input type="email" name="email" value="<%= profUser.email %>" disabled>
             <% } %>
         </div>
+        <% if(locals.user && user.id==profUser.id){ %>
         <div class="edit-user">
             <button type="button" id="write-pen" ><i class="fa-solid fa-pen"></i></button>
             <button type="button" id="cancel-edit" disabled><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <% } %>
         
     </div>
 </div>
 
   
+<script src="/scripts/profileScript.js"></script>

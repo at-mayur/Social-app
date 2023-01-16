@@ -1,30 +1,76 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const User = require("../models/user");
 
-function homeController(request, response){
-    Post.find({}).populate('user').populate({
-        path: 'comments',
-        populate: {
-            path: "user post"
-        }
-    }).exec(function(error, posts){
-        if(error){
-            console.log(`Error fetching posts from DB..\n${error}`);
-            return;
-        }
+async function homeController(request, response){
+
+    try {
+
+        let posts = await Post.find({}).populate('user').populate({
+            path: 'comments',
+            populate: {
+                path: "user post"
+            }
+        });
+
+        let users = await User.find({});
 
         return response.render("home",{
             title: "Home | Posts",
-            posts: posts
+            posts: posts,
+            users: users
         });
-    });
 
+
+    } catch (error) {
+        console.log(`Error fetching posts..\n${error}`);
+    }
+    
+    
 }
 
-function profileController(request, response){
-    return response.render("profile", {
-        title: "User | Profile"
-    });
+async function profileController(request, response){
+    // console.log(request.params.id);
+    try{
+        let profUser = await User.findById(request.params.id);
+        return response.render("profile", {
+            title: "User | Profile",
+            profUser: profUser
+        });
+
+
+    } catch(error){
+        console.log(`Error getting user from DB..\n${error}`);
+    }
+    
+    
+}
+
+async function profileUpdateController(request, response){
+
+    try {
+
+        let updateUser = request.body;
+        if(request.user.id==updateUser.userId){
+            if(request.user.email!=updateUser.email){
+    
+                await User.findByIdAndUpdate(updateUser.userId, {username: updateUser.username, email: updateUser.email});
+                
+            }
+            else{
+
+                await User.findByIdAndUpdate(updateUser.userId, {username: updateUser.username});
+                
+            }
+        }
+
+        return response.redirect("back");
+        
+    } catch (error) {
+        console.log(`Error updating user data..\n${error}`);
+    }
+    
+
 }
 
 function signUpController(request, response){
@@ -38,6 +84,7 @@ function signUpController(request, response){
 
 function signInController(request, response){
     if(request.isAuthenticated()){
+        request.flash('success', 'Logged In..');
         return response.redirect("/");
     }
     return response.render("signin", {
@@ -55,9 +102,36 @@ function removeSession(request, response){
             console.log("Error signing off\n", error);
             return;
         }
+
+        request.flash('success', 'Logged out successfully..');
     });
 
-    return response.redirect("/");
+    return response.redirect("/sign-in");
+}
+
+async function createUser(request, response){
+    try {
+        let user = await User.findOne({email: request.body.email});
+
+        if(user){
+            console.log(`User with given mail Id already exists..`);
+            return;
+        }
+        if(request.body.password!=request.body.confirmPassword){
+            console.log(`Password and Confirm Password does not match.\nTry again...`);
+            return;
+        }
+
+        let newUser = new User(request.body);
+        await newUser.save();
+
+        return response.redirect("/sign-in");
+
+
+    } catch (error) {
+        console.log(`Sorry, Error fetching user..\n${error}`);
+    }
+    
 }
 
 module.exports = {
@@ -66,5 +140,7 @@ module.exports = {
     signUpController: signUpController,
     signInController: signInController,
     createSession: createSession,
-    removeSession: removeSession
+    removeSession: removeSession,
+    createUser: createUser, 
+    profileUpdateController: profileUpdateController
 };

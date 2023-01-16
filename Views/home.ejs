@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/css/homeStyle.css">
 
 <div class="sub-body">
+    <% if(flash.success && flash.success.length>0){ %>
+        <p><%= flash.success %></p>
+    <% } %>
     <div id="home-container">
         <div id="post-container">
             <h2 class="head">Timeline</h2>

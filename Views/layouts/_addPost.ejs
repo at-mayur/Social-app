@@ -18,9 +18,13 @@
     <h2 class="head">Friends</h2>
     <% if(locals.user){ %>
         <ul>
-            <li>
-                <a href="/profile/<%= user.id %>"><%= user.username %></a>
-            </li>
+            <% for(let use of users){ %>
+                <% if(user.id!=use.id){ %>
+                    <li>
+                        <a href="/profile/<%= use.id %>"><%= use.username %></a>
+                    </li>
+                <% } %>
+            <% } %>
         </ul>
     <% } %>
 </div>
