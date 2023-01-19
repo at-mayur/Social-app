@@ -10,7 +10,7 @@ const router = express.Router();
 
 
 router.get("/", passport.checkAuthentication, controller.homeController);
-router.get("/profile/:id", localPassport.checkAuthentication, controller.profileController);
+router.get("/profile/:id", passport.checkAuthentication, controller.profileController);
 router.post("/create-user", controller.createUser);
 router.get("/sign-up", controller.signUpController);
 router.get("/sign-in", controller.signInController);

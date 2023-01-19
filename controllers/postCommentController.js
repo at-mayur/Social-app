@@ -10,10 +10,12 @@ module.exports.createPostController = async function(request, response){
             user: request.user._id
         });
 
+        request.flash('success', 'Post Created Successfully..');
         response.redirect("back");
 
 
     } catch (error) {
+        request.flash('error', error);
         console.log(`Error adding post to DB..\n${error}`);
     }
     
@@ -34,10 +36,12 @@ module.exports.createCommentController = async function(request, response){
         post.comments.push(comment._id);
         await post.save();
 
+        request.flash('success', 'Comment added Successfully..');
         return response.redirect("back");
 
 
     } catch (error) {
+        request.flash('error', error);
         console.log(`Error adding Comment to DB..\n${error}`);
     }
     
@@ -55,10 +59,12 @@ module.exports.deletePostController = async function(request, response){
             let comment = await Comment.deleteMany({post: request.params.id});
         }
 
+        request.flash('success', 'Post deleted Successfully..');
         return response.redirect("back");
 
 
     } catch (error) {
+        request.flash('error', error);
         console.log(`Error deleting comments on that post..\n${error}`);
     }
     
@@ -76,10 +82,12 @@ module.exports.deleteCommentController = async function(request, response){
 
         await comment.remove();
 
+        request.flash('success', 'Comment deleted Successfully..');
         return response.redirect("back");
 
 
     } catch (error) {
+        request.flash('error', error);
         console.log(`Error deleting comment from post Array..\n${error}`);
     }
 

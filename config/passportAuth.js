@@ -50,9 +50,13 @@ passport.deserializeUser(function(id, done){
 
 passport.checkAuthentication = function(request, response, next){
     if(request.isAuthenticated()){
+        // console.log("request", request.flash("success"), request.flash("success"));
+        // console.log("response", response.locals.messages.success, response.locals.messages.error);
         return next();
     }
 
+    request.flash('success', response.locals.messages.success);
+    request.flash('success', response.locals.messages.error);
     return response.redirect("/sign-in");
 };
 

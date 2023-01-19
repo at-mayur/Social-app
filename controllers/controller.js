@@ -39,6 +39,7 @@ async function profileController(request, response){
 
 
     } catch(error){
+        request.flash('error', error);
         console.log(`Error getting user from DB..\n${error}`);
     }
     
@@ -63,6 +64,7 @@ async function profileUpdateController(request, response){
             }
         }
 
+        request.flash('success', 'User details updated Successfully..');
         return response.redirect("back");
         
     } catch (error) {
@@ -74,6 +76,7 @@ async function profileUpdateController(request, response){
 
 function signUpController(request, response){
     if(request.isAuthenticated()){
+        request.flash('info', 'Already logged in..');
         return response.redirect("/");
     }
     return response.render("signup", {
@@ -83,6 +86,7 @@ function signUpController(request, response){
 
 function signInController(request, response){
     if(request.isAuthenticated()){
+        request.flash('info', 'Already logged in..');
         return response.redirect("/");
     }
     return response.render("signin", {
@@ -91,7 +95,7 @@ function signInController(request, response){
 }
 
 function createSession(request, response){
-    request.flash('success', 'Logged In..');
+    request.flash('success', 'Log In Successful..');
     return response.redirect("/");
 }
 
@@ -99,6 +103,7 @@ function removeSession(request, response){
     request.logout(function(error){
         if(error){
             console.log("Error signing off\n", error);
+            request.flash('error', error);
             return;
         }
 
@@ -123,6 +128,7 @@ async function createUser(request, response){
         let newUser = new User(request.body);
         await newUser.save();
 
+        request.flash('success', 'User Created Successfully...');
         return response.redirect("/sign-in");
 
 

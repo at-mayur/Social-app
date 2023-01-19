@@ -30,6 +30,28 @@
                     progressBar: true
                 }).show();
             <% } %>
+
+            <% if(locals.messages && messages.error.length > 0) { %>
+                new Noty({
+                    theme: 'relax',
+                    type: 'error',
+                    layout: 'topRight',
+                    text: '<%= messages.error %>',
+                    timeout: 2000,
+                    progressBar: true
+                }).show();
+            <% } %>
+
+            <% if(locals.messages && messages.info.length > 0) { %>
+                new Noty({
+                    theme: 'relax',
+                    type: 'info',
+                    layout: 'topRight',
+                    text: '<%= messages.info %>',
+                    timeout: 2000,
+                    progressBar: true
+                }).show();
+            <% } %>
         </script>
             
     </body>
