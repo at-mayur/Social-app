@@ -42,6 +42,7 @@ app.use(express.urlencoded());
 app.use(ejsLayouts);
 
 app.use(express.static("./Views/Static"));
+app.use("/upload", express.static("./upload"));
 
 app.use(expSession({
     name: 'currUser',

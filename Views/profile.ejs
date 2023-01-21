@@ -6,10 +6,15 @@
     <div id="profile-details">
         <div class="user-details-section">
             <h3>User Details</h3>
+            <div id="prof-img">
+                <img src="<%= user.profile %>" alt="<%= profUser.username %>" srcset="">
+            </div>
             <% if(locals.user && profUser.id==user.id){ %>
-                <form method="post" action="/profile-update" id="edit-user-form" class="">
+                <form method="post" action="/profile-update" enctype="multipart/form-data" id="edit-user-form" class="">
                     <input type="text" name="username" value="<%= profUser.username %>" disabled>
                     <input type="email" name="email" value="<%= profUser.email %>" disabled>
+                    <label for="#profilePic">Your's Profile Pic</label>
+                    <input type="file" id="profilePic" name="profile" disabled >
                     <input type="hidden" name="userId" value="<%= profUser.id %>">
 
                     <input type="submit" value="Update Details" disabled >

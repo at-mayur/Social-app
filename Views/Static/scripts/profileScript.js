@@ -4,7 +4,7 @@ var userEditForm = document.getElementById("edit-user-form");
 
 if(userEditForm){
 
-    var inputElements = serEditForm.children;
+    var inputElements = userEditForm.children;
     pen.addEventListener("click", function(){
         cancelEdit.disabled = false;
         for(let elem of inputElements){

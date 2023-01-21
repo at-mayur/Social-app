@@ -1,6 +1,8 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
 
 async function homeController(request, response){
 
@@ -35,6 +37,7 @@ async function profileController(request, response){
     // console.log(request.params.id);
     try{
         let profUser = await User.findById(request.params.id);
+        profUser.password = "";
         return response.render("profile", {
             title: "User | Profile",
             profUser: profUser
@@ -55,19 +58,53 @@ async function profileUpdateController(request, response){
 
         let updateUser = request.body;
         if(request.user.id==updateUser.userId){
+
             if(request.user.email!=updateUser.email){
+
+                let user = await User.findOne({email: updateUser.email});
+
+                if(user){
+                    console.log("User already exist with given Emailid. Select another one.");
+                    request.flash('info', 'User already exist with given Emailid.');
+                    return response.redirect("back");
+                }
     
-                await User.findByIdAndUpdate(updateUser.userId, {username: updateUser.username, email: updateUser.email});
+                let userWithID = await User.findById(updateUser.userId);
+                userWithID.username = updateUser.username;
+                userWithID.email = updateUser.email;
+
+                if(request.file){
+                    if(userWithID.profile){
+                        if(fs.existsSync(path.join(__dirname, ".."+userWithID.profile))){
+                            fs.unlinkSync(path.join(__dirname, ".."+userWithID.profile));
+                        }
+                    }
+                    userWithID.profile = User.profilePicPath + request.file.filename;
+                }
+
+                await userWithID.save();
                 
             }
             else{
 
-                await User.findByIdAndUpdate(updateUser.userId, {username: updateUser.username});
+                let userWithID = await User.findById(updateUser.userId);
+                userWithID.username = updateUser.username;
+
+                if(request.file){
+                    if(userWithID.profile){
+                        if(fs.existsSync(path.join(__dirname, ".."+userWithID.profile))){
+                            fs.unlinkSync(path.join(__dirname, ".."+userWithID.profile));
+                        }
+                    }
+                    userWithID.profile = User.profilePicPath + request.file.filename;
+                }
+
+                await userWithID.save();
                 
             }
         }
 
-        request.flash('success', 'User details updated Successfully..');
+        request.flash("success", "User Details Updated Successfully");
         return response.redirect("back");
         
     } catch (error) {
