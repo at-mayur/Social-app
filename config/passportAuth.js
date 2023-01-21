@@ -55,8 +55,14 @@ passport.checkAuthentication = function(request, response, next){
         return next();
     }
 
-    request.flash('success', response.locals.messages.success);
-    request.flash('success', response.locals.messages.error);
+    if(response.locals.messages.success && response.locals.messages.success.length>0){
+        // console.log(response.locals.messages.success);
+        request.flash('success', response.locals.messages.success);
+    }
+    if(response.locals.messages.error && response.locals.messages.error.length>0){
+        request.flash('error', response.locals.messages.error);
+    }
+    
     return response.redirect("/sign-in");
 };
 

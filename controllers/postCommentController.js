@@ -5,16 +5,31 @@ const Comment = require("../models/comment");
 module.exports.createPostController = async function(request, response){
 
     try {
-        await Post.create({
+        
+        let post = await Post.create({
             postContent: request.body.postContent,
             user: request.user._id
         });
+
+        await post.populate("user");
+        post.user.password = "";
+        if(request.xhr){
+            return response.status(201).json({
+                post: post,
+                message: "Post created Successfully!"
+            });
+        }
 
         request.flash('success', 'Post Created Successfully..');
         response.redirect("back");
 
 
     } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
         request.flash('error', error);
         console.log(`Error adding post to DB..\n${error}`);
     }
@@ -36,11 +51,26 @@ module.exports.createCommentController = async function(request, response){
         post.comments.push(comment._id);
         await post.save();
 
+        await comment.populate("user");
+        comment.user.password = "";
+
+        if(request.xhr){
+            return response.status(201).json({
+                comment: comment,
+                message: "Comment added Successfully"
+            });
+        }
+
         request.flash('success', 'Comment added Successfully..');
         return response.redirect("back");
 
 
     } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
         request.flash('error', error);
         console.log(`Error adding Comment to DB..\n${error}`);
     }
@@ -57,6 +87,14 @@ module.exports.deletePostController = async function(request, response){
             await post.remove();
 
             let comment = await Comment.deleteMany({post: request.params.id});
+
+            // console.log(request.xhr);
+            if(request.xhr){
+                return response.status(200).json({
+                    post: request.params.id,
+                    message: "Post deleted Successfully"
+                });
+            }
         }
 
         request.flash('success', 'Post deleted Successfully..');
@@ -64,6 +102,11 @@ module.exports.deletePostController = async function(request, response){
 
 
     } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
         request.flash('error', error);
         console.log(`Error deleting comments on that post..\n${error}`);
     }
@@ -78,15 +121,27 @@ module.exports.deleteCommentController = async function(request, response){
 
         if(request.user && (request.user.id==comment.user.id || request.user.id==comment.post.user)){
             let post = await Post.findByIdAndUpdate(comment.post.id, { $pull: {'comments': comment.id}});
-        }
+            await comment.remove();
 
-        await comment.remove();
+            // console.log(request.xhr);
+            if(request.xhr){
+                return response.status(200).json({
+                    comment: request.params.id,
+                    message: "Comment deleted Successfully"
+                });
+            }
+        }
 
         request.flash('success', 'Comment deleted Successfully..');
         return response.redirect("back");
 
 
     } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
         request.flash('error', error);
         console.log(`Error deleting comment from post Array..\n${error}`);
     }

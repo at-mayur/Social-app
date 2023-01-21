@@ -6,10 +6,10 @@
     <div id="home-container">
         <div id="post-container">
             <h2 class="head">Timeline</h2>
-            <ul class="post-list">
+            <ul id="post-list" class="post-list">
 
                 <% for(let post of posts){ %>
-                <li>
+                <li id="post-<%= post.id %>">
                     <div class="post">
                         <%- include('./layouts/_post', {post: post}); %>
                     </div>
@@ -36,16 +36,7 @@
 </div>
 
 
-<Script>
-    if(locals.messges.success && messages.length >0){
-        new Noty({
-            type: "success",
-            layout: "top-right",
-            text: messages.success
-
-        }).show();
-    }
-</Script>
+<script src="/scripts/homeScript.js"></script>
 
 
 

@@ -2,7 +2,7 @@
 <div id="add-post">
     <h2 class="head">Post..</h2>
     <% if(locals.user){ %>
-    <form action="/post/create-post" method="post">
+    <form action="/post/create-post" id="add-post-form" method="post">
         <textarea name="postContent" cols="50" rows="5"></textarea>
         <button type="submit">Post</button>
     </form>

@@ -8,9 +8,9 @@
     <div class="post-comment">
         <div class="comment-form">
             <% if(locals.user){ %>
-                <form action="/post/create-comment" method="post">
+                <form action="/post/create-comment" id="add-comment-form-<%= post.id %>" method="post">
                     <input type="text" name="commentContent" placeholder="Add your comment here..">
-                    <input type="hidden" name="post" value="<%= post._id %>">
+                    <input type="hidden" name="post" value="<%= post.id %>">
                     <button type="submit">Post</button>
                 </form>
             <% }else{ %>
@@ -28,6 +28,6 @@
 
 <% if(locals.user && locals.user.id==post.user.id){ %>
     <div class="post-delete">
-        <a href="/post/post-delete/<%= post.id %>"><i class="fa-regular fa-trash-can"></i></a>
+        <a id="post-delete-<%= post.id %>" href="/post/post-delete/<%= post.id %>"><i class="fa-regular fa-trash-can"></i></a>
     </div>
 <% } %>

@@ -6,12 +6,15 @@ async function homeController(request, response){
 
     try {
 
-        let posts = await Post.find({}).populate('user').populate({
+        let posts = await Post.find({}).sort('-createdAt')
+        .populate('user').populate({
             path: 'comments',
+            options: { sort: '-createdAt' },
             populate: {
                 path: "user post"
             }
         });
+
 
         let users = await User.find({});
         return response.render("home",{
