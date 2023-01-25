@@ -7,7 +7,11 @@
         <div class="user-details-section">
             <h3>User Details</h3>
             <div id="prof-img">
-                <img src="<%= user.profile %>" alt="<%= profUser.username %>" srcset="">
+                <% if(locals.profUser && profUser.profile){ %>
+                    <img src="<%= profUser.profile %>" alt="<%= profUser.username %>" srcset="">
+                <% }else{ %>
+                    <img src="../upload/profile/defaultDP.svg" alt="<%= profUser.username %>" srcset="">
+                <% } %>
             </div>
             <% if(locals.user && profUser.id==user.id){ %>
                 <form method="post" action="/profile-update" enctype="multipart/form-data" id="edit-user-form" class="">

@@ -27,6 +27,11 @@ const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const customMware = require("./config/customMiddleWare");
 
+// API router
+const apiRouter = require("./routes/api/index_api_routes");
+
+// Loading environment variables
+require("dotenv").config();
 
 const app = express();
 
@@ -39,6 +44,8 @@ app.set("layout extractScripts", true);
 
 app.use(express.urlencoded());
 
+app.use(express.json());
+
 app.use(ejsLayouts);
 
 app.use(express.static("./Views/Static"));
@@ -46,7 +53,7 @@ app.use("/upload", express.static("./upload"));
 
 app.use(expSession({
     name: 'currUser',
-    secret: 'myEncryption',
+    secret: process.env.EXPRESS_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: {
@@ -69,6 +76,8 @@ app.use(flash());
 app.use(customMware.flashSet);
 
 app.use("/", routes);
+
+app.use("/api", apiRouter);
 
 
 app.listen(port, function(error){
