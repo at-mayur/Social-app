@@ -2,7 +2,7 @@ const express = require("express");
 const postApiControllers = require("../../../controllers/api/v1/post_api");
 
 const passport = require("passport");
-const jwtPassport = require("../../../config/passportJWT");
+
 
 const router = express.Router();
 

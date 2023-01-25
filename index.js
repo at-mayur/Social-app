@@ -14,6 +14,8 @@ const User = require("./models/user");
 
 // importing passport
 const localStrategy = require("./config/passportAuth");
+const jwtPassport = require("./config/passportJWT");
+const googleAuthPassport = require("./config/passportGoogleAuthStrategy");
 const passport = require("passport");
 const expSession = require("express-session");
 const cookieParser = require("cookie-parser");

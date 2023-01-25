@@ -1,10 +1,21 @@
-form{
-    width: 60%;
+.form-div{
+    width: 50%;
     height: 100%;
     margin: auto;
-    padding: 1em;
     border-radius: 10px;
     background-color: lightgrey;
+    box-sizing: border-box;
+    padding-top: 2rem;
+}
+
+.form-div h1{
+    margin-top: 0;
+}
+
+form{
+    width: 80%;
+    margin: 2rem auto;
+    padding: 1em;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -18,4 +29,17 @@ form input{
     margin: 5px 0;
     outline: none;
 
+}
+
+.social-auth{
+    font-size: 1.5rem;
+}
+
+.social-auth a{
+    color: rgb(48, 2, 187);
+    text-decoration: none;
+}
+
+.social-auth a:hover{
+    color: rgb(213, 1, 1);
 }
