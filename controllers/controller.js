@@ -9,11 +9,12 @@ async function homeController(request, response){
     try {
 
         let posts = await Post.find({}).sort('-createdAt')
-        .populate('user').populate({
+        .populate('user', "username email").populate({
             path: 'comments',
             options: { sort: '-createdAt' },
             populate: {
-                path: "user post"
+                path: "user",
+                select: "username email"
             }
         });
 

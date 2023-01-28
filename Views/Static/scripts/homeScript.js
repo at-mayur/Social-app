@@ -59,9 +59,9 @@
                 url: "/post/create-comment",
                 data: addCommentForm.serialize(),
                 success: function(data){
-                    // console.log(data);
+                    // console.log(data.comment.post);
                     let newComment = commentItem(data.comment);
-                    $(`#${ data.comment.post }`).prepend(newComment);
+                    $(`#${ data.comment.post._id }`).prepend(newComment);
                     deleteComment(`comment-delete-${data.comment._id}`);
                     // console.log(data);
                 },
