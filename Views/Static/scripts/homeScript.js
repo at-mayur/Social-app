@@ -8,6 +8,7 @@
             let postId = postLi.id.split("-")[1];
             deletePost(`post-delete-${postId}`);
             createComment(`add-comment-form-${postId}`);
+            likePost(postId);
 
             let commentList = $(`#${postId} > li`);
 
@@ -16,6 +17,7 @@
                 let commentId = commentLi.id;
 
                 deleteComment(`comment-delete-${commentId}`);
+                likeComment(commentId);
             }
 
             
@@ -23,6 +25,72 @@
 
 
     });
+
+
+    let likePost = function(pstLikeId){
+        let likeBtn = $(`#post-like-${pstLikeId}`);
+
+        likeBtn.click(function(event){
+            event.preventDefault();
+
+            $.ajax({
+                method: "GET",
+                url: likeBtn.prop("href"),
+                success: function(data){
+                    if(data.likeAdded){
+                        likeBtn.html(`<i class="fa-solid fa-thumbs-up"></i>`);
+                        let count = $(`#post-like-count-${pstLikeId}`).text();
+                        $(`#post-like-count-${pstLikeId}`).text(++count);
+                    }
+                    else{
+                        likeBtn.html(`<i class="fa-regular fa-thumbs-up"></i>`);
+                        let count = $(`#post-like-count-${pstLikeId}`).text();
+                        if(count>0){
+                            $(`#post-like-count-${pstLikeId}`).text(--count);
+                        }
+                        
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        })
+    }
+
+    let likeComment = function(cmtLikeId){
+        let likeBtn = $(`#comment-like-${cmtLikeId}`);
+
+        likeBtn.click(function(event){
+            event.preventDefault();
+
+            $.ajax({
+                method: "GET",
+                url: likeBtn.prop("href"),
+                success: function(data){
+                    if(data.likeAdded){
+                        likeBtn.removeClass("grey");
+                        likeBtn.addClass("blue");
+                        let count = $(`#comment-like-count-${cmtLikeId}`).text();
+                        $(`#comment-like-count-${cmtLikeId}`).text(++count);
+                    }
+                    else{
+                        likeBtn.removeClass("blue");
+                        likeBtn.addClass("grey");
+                        let count = $(`#comment-like-count-${cmtLikeId}`).text();
+                        if(count>0){
+                            $(`#comment-like-count-${cmtLikeId}`).text(--count);
+                        }
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        })
+    }
+
+
 
     let createPost = function(){
         let addPostForm = $("#add-post-form");
@@ -38,6 +106,7 @@
                     let newPost = postItem(data.post);
                     $("#post-list").prepend(newPost);
                     deletePost(`post-delete-${data.post._id}`);
+                    likePost(data.post._id);
                     createComment(`add-comment-form-${data.post._id}`);
                     // console.log(data);
                 },
@@ -63,6 +132,7 @@
                     let newComment = commentItem(data.comment);
                     $(`#${ data.comment.post._id }`).prepend(newComment);
                     deleteComment(`comment-delete-${data.comment._id}`);
+                    likeComment(data.comment._id);
                     // console.log(data);
                 },
                 error: function(err){
@@ -122,6 +192,10 @@
         <div class="comment">
             <h5>${ comment.user.username }</h5>
             <p>${ comment.commentContent }</p>
+            <div class="like-div">
+                <span class="like-span"><a id="comment-like-${ comment._id }" class="grey" href="/post/comment-like/${ comment._id }">Like</a></span>
+                <span id="comment-like-count-${ comment._id }">0</span>
+            </div>
         </div>
 
         <div class="comment-delete">
@@ -135,20 +209,6 @@
 
     function postItem(post){
         // console.log(post);
-        let comments = ``;
-        for(let comment of post.comments){
-            comments += `<li>
-            <div class="comment">
-                <h5>${ comment.user.username }</h5>
-                <p>${ comment.commentContent }</p>
-            </div>
-    
-            <div class="comment-delete">
-                <a id="comment-delete-${ comment.id }" href="/post/delete-comment/${ comment.id }"><i class="fa-solid fa-trash-can"></i></a>
-            </div>
-            
-        </li>`;
-        }
 
         return $(`
 
@@ -158,6 +218,10 @@
             <div class="post-body">
                 <div class="post-content">
                     <p>${ post.postContent }</p>
+                    <div class="like-div">
+                        <a id="post-like-${ post._id }" href="/post/post-like/${ post._id }"><i class="fa-regular fa-thumbs-up"></i></a>
+                        <span id="post-like-count-${ post._id }">0</span>
+                    </div>
                 </div>
                 <div class="post-comment">
                     <div class="comment-form">
@@ -183,8 +247,8 @@
             <h3 class="head">
                 Comments
             </h3>
-            <ul id="${ post._id }" class="comment-list">`+comments+
-            `    
+            <ul id="${ post._id }" class="comment-list">
+                
             </ul>
             </div>
 

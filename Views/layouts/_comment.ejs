@@ -9,6 +9,15 @@
         <div class="comment">
             <h5><%= comment.user.username %></h5>
             <p><%= comment.commentContent %></p>
+            <div class="like-div">
+                <% if(comment.like){ %>
+                    <span class="like-span"><a id="comment-like-<%= comment.id %>" class="blue" href="/post/comment-like/<%= comment.id %>">Like</a></span>
+                <% }else{ %>
+                    <span class="like-span"><a id="comment-like-<%= comment.id %>" class="grey" href="/post/comment-like/<%= comment.id %>">Like</a></span>
+                <% } %>
+                
+                <span id="comment-like-count-<%= comment.id %>"><%= comment.likes.length %></span>
+            </div>
         </div>
 
         <% if(locals.user && (locals.user.id==post.user.id || locals.user.id==comment.user.id)){ %>

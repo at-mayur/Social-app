@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const User = require("../models/user");
+const Like = require("../models/like");
 const fs = require("fs");
 const path = require("path");
 
@@ -14,9 +15,33 @@ async function homeController(request, response){
             options: { sort: '-createdAt' },
             populate: {
                 path: "user",
-                select: "username email"
+                select: "_id username email"
             }
         });
+
+
+        for(let post of posts){
+            let likeFound = await Like.findOne({ user: request.user.id, target: post.id });
+
+            if(likeFound){
+                post.like = true;
+            }
+            else{
+                post.like = false;
+            }
+
+            for(let comment of post.comments){
+                let likeFound = await Like.findOne({ user: request.user.id, target: comment.id });
+
+                if(likeFound){
+                    comment.like = true;
+                }
+                else{
+                    comment.like = false;
+                }
+            }
+
+        }
 
 
         let users = await User.find({});

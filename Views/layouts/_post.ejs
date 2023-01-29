@@ -4,6 +4,14 @@
 <div class="post-body">
     <div class="post-content">
         <p><%= post.postContent %></p>
+        <div class="like-div">
+            <% if(post.like){ %>
+                <a id="post-like-<%= post.id %>" href="/post/post-like/<%= post.id %>"><i class="fa-solid fa-thumbs-up"></i></a>
+            <% }else{ %>
+                <a id="post-like-<%= post.id %>" href="/post/post-like/<%= post.id %>"><i class="fa-regular fa-thumbs-up"></i></a>
+            <% } %>
+            <span id="post-like-count-<%= post.id %>"><%= post.likes.length %></span>
+        </div>
     </div>
     <div class="post-comment">
         <div class="comment-form">
