@@ -26,4 +26,7 @@ router.post("/create-session", passport.authenticate('local', {
 router.get("/auth/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get("/auth/google/callBack", passport.authenticate('google', { failureRedirect: "/sign-in" }), controller.createSession);
 
+router.get("/accept-request/:id", passport.checkAuthentication ,controller.acceptRequest);
+router.get("/add-friend/:id", passport.checkAuthentication, controller.addFriend);
+
 module.exports = router;

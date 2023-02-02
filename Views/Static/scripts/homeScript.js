@@ -24,6 +24,23 @@
         }
 
 
+        let requestAccept = $(".accept-request");
+
+        for(let accReq of requestAccept){
+            let id = accReq.id.split('-')[1];
+
+            acceptRequest(id);
+        }
+
+        let friendAdd = $(".add-friend");
+
+        for(let addFr of friendAdd){
+            let id = addFr.id.split('-')[2];
+
+            addFriend(id);
+        }
+
+
     });
 
 
@@ -257,6 +274,52 @@
 
         `);
     }
+
+
+
+
+    function acceptRequest(id){
+        let elem = $(`#request-accept-${id}`);
+
+        elem.click(function(event){
+            event.preventDefault();
+
+            $.ajax({
+                method: "GET",
+                url: elem.prop("href"),
+                success: function(data){
+                    // console.log(data);
+                    elem.remove();
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            });
+        })
+    }
+
+
+    function addFriend(id){
+        let elem = $(`#add-friend-${id}`);
+
+        elem.click(function(event){
+            event.preventDefault();
+
+            $.ajax({
+                method: "GET",
+                url: elem.prop("href"),
+                success: function(data){
+                    // console.log(data);
+                    elem.remove();
+                    $(`#friend-add-${id}`).append(`<p class="request-sent">Request Sent</p>`);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            });
+        })
+    }
+
 
     createPost();
 

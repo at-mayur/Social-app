@@ -3,7 +3,7 @@
     <h2 class="head">Post..</h2>
     <% if(locals.user){ %>
     <form action="/post/create-post" id="add-post-form" method="post">
-        <textarea name="postContent" cols="50" rows="5"></textarea>
+        <textarea name="postContent" cols="30" rows="2"></textarea>
         <button type="submit">Post</button>
     </form>
     <% }else{ %>
@@ -18,11 +18,65 @@
     <h2 class="head">Friends</h2>
     <% if(locals.user){ %>
         <ul>
+            <% for(let use of user.friends){ %>
+                <li>
+                    <div class="user-img">
+                        <% if(use.profile){ %>
+                            <img src="<%= use.profile %>" alt="<%= use.username %>" >
+                        <% }else{ %>
+                            <img src="../upload/profile/defaultDP.svg" alt="<%= use.username %>" >
+                        <% } %>
+                    </div>
+                    <p>
+                        <%= use.username %>
+                    </p>
+                </li>
+            <% } %>
+            <% for(let use of user.friendRequests){ %>
+                <li id="accept-<%= use.id %>" class="accept-request">
+                    <div class="user-img">
+                        <% if(use.profile){ %>
+                            <img src="<%= use.profile %>" alt="<%= use.username %>" >
+                        <% }else{ %>
+                            <img src="../upload/profile/defaultDP.svg" alt="<%= use.username %>" >
+                        <% } %>
+                    </div>
+                    <p>
+                        <%= use.username %>
+                    </p>
+                    <a id="request-accept-<%= use.id %>" href="/accept-request/<%= use.id %>">Accept</a>
+                </li>
+            <% } %>
+            <% for(let use of user.requestSent){ %>
+                <li>
+                    <div class="user-img">
+                        <% if(use.profile){ %>
+                            <img src="<%= use.profile %>" alt="<%= use.username %>" >
+                        <% }else{ %>
+                            <img src="../upload/profile/defaultDP.svg" alt="<%= use.username %>" >
+                        <% } %>
+                    </div>
+                    <p>
+                        <%= use.username %>
+                    </p>
+                    <p class="request-sent">Request Sent</p>
+                </li>
+            <% } %>
             <% for(let use of users){ %>
-                <% if(user.id!=use.id){ %>
-                    <li>
-                        <a href="/profile/<%= use.id %>"><%= use.username %></a>
-                    </li>
+                <% if(use.id!=user.id){ %>
+                <li id="friend-add-<%= use.id %>" class="add-friend">
+                    <div class="user-img">
+                        <% if(use.profile){ %>
+                            <img src="<%= use.profile %>" alt="<%= use.username %>" >
+                        <% }else{ %>
+                            <img src="../upload/profile/defaultDP.svg" alt="<%= use.username %>" >
+                        <% } %>
+                    </div>
+                    <p>
+                        <%= use.username %>
+                    </p>
+                    <a id="add-friend-<%= use.id %>" href="/add-friend/<%= use.id %>">Add Friend</a>
+                </li>
                 <% } %>
             <% } %>
         </ul>

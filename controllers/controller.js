@@ -2,6 +2,8 @@ const Post = require("../models/post");
 const Comment = require("../models/comment");
 const User = require("../models/user");
 const Like = require("../models/like");
+const Friendship = require("../models/friendship");
+const FriendRequest = require("../models/friendRequest");
 const fs = require("fs");
 const path = require("path");
 
@@ -45,6 +47,28 @@ async function homeController(request, response){
 
 
         let users = await User.find({});
+
+
+        for(let i=0 ; i<users.length ; i++){
+
+            
+            if(users[i].id==request.user.id){
+                users.splice(i, 1);
+                i--;
+                continue;
+            }
+            
+            let fr1 = await Friendship.findOne({ requestAccepted: request.user.id, requestSent: users[i].id });
+            let fr2 = await Friendship.findOne({ requestAccepted: users[i].id, requestSent: request.user.id });
+            let req1 = await FriendRequest.findOne({ sentBy: request.user.id, sentTo: users[i].id });
+            let req2 = await FriendRequest.findOne({ sentBy: users[i].id, sentTo: request.user.id });
+            
+            if(fr1 || fr2 || req1 || req2){
+                users.splice(i, 1);
+                i--;
+            }
+            
+        }
         return response.render("home",{
             title: "Home | Posts",
             posts: posts,
@@ -204,6 +228,112 @@ async function createUser(request, response){
     
 }
 
+async function acceptRequest(request, response){
+
+    try {
+        let user = await User.findById(request.params.id);
+
+        if(!user){
+            if(request.xhr){
+                return response.status(400).json({
+                    msg: "User not found"
+                });
+            }
+            
+        }
+
+        await Friendship.create({
+            requestAccepted: request.user.id,
+            requestSent: request.params.id
+        });
+
+        await User.findByIdAndUpdate(request.user.id, { $pull: { 'friendRequests': request.params.id },
+                                                        $push: { 'friends': request.params.id } });
+
+        let index = user.requestSent.findIndex((objId) => { return objId==request.user.id });
+
+        if(index!=-1){
+            user.requestSent.splice(index, 1);
+        }
+
+        user.friends.push(request.user.id);
+
+        await user.save();
+
+        await FriendRequest.deleteOne({ sentBy:request.params.id, sentTo: request.user.id });
+
+        if(request.xhr){
+            return response.status(200).json({
+                msg: "Friend added successfully"
+            });
+        }
+
+        return response.redirect("back");
+
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                msg: "Error occured while accepting request"
+            });
+        }
+        
+        console.log("Error adding friendship", error);
+        return response.redirect("back");
+    }
+
+}
+
+
+async function addFriend(request, response){
+
+    try {
+        let user = await User.findById(request.params.id);
+
+        if(!user){
+            if(request.xhr){
+                return response.status(400).json({
+                    msg: "User not found"
+                });
+            }
+
+            return response.redirect("back");
+            
+        }
+
+        await FriendRequest.create({
+            sentBy: request.user.id,
+            sentTo: request.params.id
+        });
+
+        await User.findByIdAndUpdate(request.user.id, { $push: { 'requestSent': request.params.id }});
+
+        user.friendRequests.push(request.user.id);
+
+        user.save();
+
+        if(request.xhr){
+            return response.status(200).json({
+                msg: "Friend Request sent successfully"
+            });
+        }
+
+        return response.redirect("back");
+
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                msg: "Error occured while sending request"
+            });
+        }
+        
+        console.log("Error adding friendship", error);
+        return response.redirect("back");
+    }
+
+}
+
 module.exports = {
     homeController: homeController,
     profileController: profileController,
@@ -212,5 +342,7 @@ module.exports = {
     createSession: createSession,
     removeSession: removeSession,
     createUser: createUser, 
-    profileUpdateController: profileUpdateController
+    profileUpdateController: profileUpdateController,
+    acceptRequest: acceptRequest,
+    addFriend: addFriend
 };

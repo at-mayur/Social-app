@@ -16,11 +16,11 @@ passport.use(new passportLocal.Strategy({
                 return done(error);
             }
             if(!user){
-                console.log("User not found");
+                // console.log("User not found");
                 return done(null, false);
             }
             if(user.password!=password){
-                console.log("Invalid Password");
+                // console.log("Invalid Password");
                 return done(null, false);
             }
             return done(null, user);
@@ -66,10 +66,18 @@ passport.checkAuthentication = function(request, response, next){
     return response.redirect("/sign-in");
 };
 
-passport.setAuthenticatedUser = function(request, response, next){
+passport.setAuthenticatedUser = async function(request, response, next){
     if(request.isAuthenticated()){
-        response.locals.user = request.user;
-        response.locals.user.password = "";
+        await User.findById(request.user.id).populate("friends friendRequests requestSent", "_id username email profile").exec(function(error, user){
+            if(error){
+                console.log(error);
+                return;
+            }
+
+            user.password = "";
+            // console.log(user);
+            response.locals.user = user;
+        });
     }
 
     next();

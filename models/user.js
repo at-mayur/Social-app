@@ -21,7 +21,25 @@ var userSchema = new mongoose.Schema({
     },
     profile: {
         type: String
-    }
+    },
+    friends: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    friendRequests: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    requestSent: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
 }, {timestamps: true});
 
 
