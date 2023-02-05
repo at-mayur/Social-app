@@ -37,6 +37,12 @@ require("dotenv").config();
 
 const app = express();
 
+
+// chat server
+const chatServer = require("http").Server(app);
+const chatSocket = require("./config/chat_server").createChatServer(chatServer);
+chatServer.listen(5000);
+
 app.set("view engine", "ejs");
 app.set("Views", "./Views");
 

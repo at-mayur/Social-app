@@ -4,6 +4,8 @@ const User = require("../models/user");
 const Like = require("../models/like");
 const Friendship = require("../models/friendship");
 const FriendRequest = require("../models/friendRequest");
+const Chat = require("../models/chat");
+const Message = require("../models/message");
 const fs = require("fs");
 const path = require("path");
 
@@ -69,10 +71,14 @@ async function homeController(request, response){
             }
             
         }
+
+        let chats = await Chat.find({ $or: [ { user1: request.user.id }, { user2: request.user.id } ] }).populate("user1 user2", "id username email profile").sort("-createdAt");
+
         return response.render("home",{
             title: "Home | Posts",
             posts: posts,
-            users: users
+            users: users,
+            chats: chats
         });
 
 
@@ -334,6 +340,90 @@ async function addFriend(request, response){
 
 }
 
+
+async function openChat(request, response){
+    try {
+
+        let userId = await User.findById(request.params.id);
+
+        let chat1 = await Chat.findOne({ user1: userId.id, user2: request.user.id }).populate("user1 user2", "id username email profile").populate({
+            path: "chatMessages",
+            options: { sort: "createdAt" }
+        });
+        let chat2 = await Chat.findOne({ user2: userId.id, user1: request.user.id }).populate("user1 user2", "id username email profile").populate({
+            path: "chatMessages",
+            options: { sort: "createdAt" }
+        });
+
+        if(chat1){
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Chat found..!!",
+                    chat: chat1,
+                    currUser: request.user
+                });
+            }
+
+            return response.redirect("back");
+        }
+
+        if(chat2){
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Chat found..!!",
+                    chat: chat2,
+                    currUser: request.user
+                });
+            }
+
+            return response.redirect("back");
+        }
+
+        let fr1 = await Friendship.findOne({ requestAccepted: request.user.id, requestSent: userId });
+        let fr2 = await Friendship.findOne({ requestAccepted: userId, requestSent: request.user.id });
+
+        if(fr1 || fr2){
+            let chat = await Chat.create({
+                user1: request.user.id,
+                user2: userId
+            });
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Chat found..!!",
+                    chat: chat,
+                    currUser: request.user
+                });
+            }
+
+            return response.redirect("back");
+        }
+
+
+        if(request.xhr){
+            return response.status(400).json({
+                msg: "You cannot Chat with this user..!!"
+            });
+        }
+
+        return response.redirect("back");
+
+        
+    } catch (error) {
+        console.log(error);
+        if(request.xhr){
+            return response.status(500).json({
+                msg: "Internal Server Error",
+                error: error
+            });
+        }
+
+        return response.redirect("back");
+    }
+}
+
+
+
 module.exports = {
     homeController: homeController,
     profileController: profileController,
@@ -344,5 +434,6 @@ module.exports = {
     createUser: createUser, 
     profileUpdateController: profileUpdateController,
     acceptRequest: acceptRequest,
-    addFriend: addFriend
+    addFriend: addFriend,
+    openChat: openChat
 };

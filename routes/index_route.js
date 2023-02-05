@@ -29,4 +29,6 @@ router.get("/auth/google/callBack", passport.authenticate('google', { failureRed
 router.get("/accept-request/:id", passport.checkAuthentication ,controller.acceptRequest);
 router.get("/add-friend/:id", passport.checkAuthentication, controller.addFriend);
 
+router.get("/open-chat/:id", passport.checkAuthentication, controller.openChat);
+
 module.exports = router;

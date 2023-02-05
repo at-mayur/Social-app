@@ -1,0 +1,66 @@
+<div class="user-chats">
+    <div class="current-active">
+        <h3>Active</h3>
+        <ul id="active-users-list">
+            
+        </ul>
+    </div>
+    <div class="friend-list">
+        <h3>Chats</h3>
+        <ul id="user-past-chats">
+            <% for(let chat of chats){ %>
+                <li id="<%= chat.id %>">
+                    <% if(chat.user1.id==user.id){ %>
+                        <div class="user-img">
+                            <% if(chat.user2.profile){ %>
+                                <img src="<%= chat.user2.profile %>" alt="<%= chat.user2.username %>" >
+                            <% }else{ %>
+                                <img src="../upload/profile/defaultDP.svg" alt="<%= chat.user2.username %>" >
+                            <% } %>
+                        </div>
+                        <p>
+                            <%= chat.user2.username %>
+                        </p>
+                        
+                        <a class="friend-action" id="chat-<%= chat.user2.id %>" href="/open-chat/<%= chat.user2.id %>"><i class="fa-solid fa-comments"></i></a>
+                        <p class="notification-dot"><i class="fa-solid fa-circle"></i></p>
+                    <% }else{ %>
+                        <div class="user-img">
+                            <% if(chat.user1.profile){ %>
+                                <img src="<%= chat.user1.profile %>" alt="<%= chat.user1.username %>" >
+                            <% }else{ %>
+                                <img src="../upload/profile/defaultDP.svg" alt="<%= chat.user1.username %>" >
+                            <% } %>
+                        </div>
+                        <p>
+                            <%= chat.user1.username %>
+                        </p>
+                        
+                        <a class="friend-action" id="chat-<%= chat.user1.id %>" href="/open-chat/<%= chat.user1.id %>"><i class="fa-solid fa-comments"></i></a>
+                        <p class="notification-dot"><i class="fa-solid fa-circle"></i></p>
+                    <% } %>
+                    
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</div>
+
+<div id="user-chat-box" class="user-chat">
+    <div class="user-chat-header">
+        <input type="text" id="current-chat" hidden >
+        <h4 id="user-chat-username">User Name</h4>
+        <a id="user-chat-box-close" class="close-chat" href=""><i class="fa-regular fa-circle-xmark"></i></a>
+    </div>
+    <div class="user-chat-messages">
+        <ul id="chat-messages-list">
+            
+            
+        </ul>
+    </div>
+    <div class="user-chat-send">
+        <textarea id="currUser-message" cols="20" rows="2"></textarea>
+        <input type="text" id="msg-send-usr" hidden >
+        <button id="message-send-btn" type="button">Send</button>
+    </div>
+</div>

@@ -67,20 +67,22 @@ passport.checkAuthentication = function(request, response, next){
 };
 
 passport.setAuthenticatedUser = async function(request, response, next){
-    if(request.isAuthenticated()){
-        await User.findById(request.user.id).populate("friends friendRequests requestSent", "_id username email profile").exec(function(error, user){
-            if(error){
-                console.log(error);
-                return;
-            }
+
+    try {
+        
+        if(request.isAuthenticated()){
+            let user = await User.findById(request.user.id).populate("friends friendRequests requestSent", "username email profile");
 
             user.password = "";
-            // console.log(user);
             response.locals.user = user;
-        });
+        }
+
+        next();
+
+    } catch (error) {
+        console.log(error);
     }
 
-    next();
 };
 
 

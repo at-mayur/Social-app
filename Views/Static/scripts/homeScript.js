@@ -40,8 +40,97 @@
             addFriend(id);
         }
 
+        let pastChats = $("#user-past-chats li > a");
+
+        for(let pastChat of pastChats){
+            openChat(pastChat);
+        }
+
 
     });
+
+
+
+    function openChat(elem){
+        elem.addEventListener("click", function(event){
+            event.preventDefault();
+
+            $.ajax({
+                method: "GET",
+                url: elem.getAttribute("href"),
+                success: function(data){
+                    if(data.chat){
+                        let chat = data.chat;
+                        let chatList = $("#chat-messages-list");
+                        let chatUser = $("#user-chat-username");
+
+                        $("#current-chat").val(chat._id);
+
+                        if(chat.user1._id==data.currUser._id){
+                            chatUser.text(chat.user2.username);
+                            $("#msg-send-usr").val(chat.user2._id);
+                        }
+                        else{
+                            chatUser.text(chat.user1.username);
+                            $("#msg-send-usr").val(chat.user1._id);
+                        }
+
+                        for(let message of chat.chatMessages){
+                            let newLi = "";
+                            if(message.user==data.currUser._id){
+                                newLi = `
+                                    <li class="left-align">
+                                        <p>${ message.content }</p>
+                                    </li>
+                                `;
+                            }
+                            else{
+                                newLi = `
+                                    <li class="right-align">
+                                        <p>${ message.content }</p>
+                                    </li>
+                                `;
+                            }
+
+                            chatList.append(newLi);
+                            
+
+                        }
+
+                        $(`#${ chat._id } > .notification-dot`).css("display", "none");
+
+                    }
+
+
+                    $("#user-chat-box").addClass("open-chat");
+                    
+
+
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        });
+    }
+
+    $("#user-chat-box-close").click(function(event){
+        event.preventDefault();
+
+        let chatList = $("#chat-messages-list");
+        let chatUser = $("#user-chat-username");
+
+        chatList.empty();
+        chatUser.text("User Name");
+
+        $("#msg-send-usr").val("");
+        $("#current-chat").val("");
+
+        $("#user-chat-box").removeClass("open-chat");
+
+    });
+
+
 
 
     let likePost = function(pstLikeId){

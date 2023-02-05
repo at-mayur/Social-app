@@ -14,7 +14,7 @@
     <% } %>
 </div>
 
-<div id="friend-list">
+<div class="friend-list">
     <h2 class="head">Friends</h2>
     <% if(locals.user){ %>
         <ul>
@@ -28,7 +28,7 @@
                         <% } %>
                     </div>
                     <p>
-                        <%= use.username %>
+                        <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
                 </li>
             <% } %>
@@ -42,9 +42,9 @@
                         <% } %>
                     </div>
                     <p>
-                        <%= use.username %>
+                        <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
-                    <a id="request-accept-<%= use.id %>" href="/accept-request/<%= use.id %>">Accept</a>
+                    <a class="friend-action" id="request-accept-<%= use.id %>" href="/accept-request/<%= use.id %>">Accept</a>
                 </li>
             <% } %>
             <% for(let use of user.requestSent){ %>
@@ -57,7 +57,7 @@
                         <% } %>
                     </div>
                     <p>
-                        <%= use.username %>
+                        <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
                     <p class="request-sent">Request Sent</p>
                 </li>
@@ -73,9 +73,9 @@
                         <% } %>
                     </div>
                     <p>
-                        <%= use.username %>
+                        <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
-                    <a id="add-friend-<%= use.id %>" href="/add-friend/<%= use.id %>">Add Friend</a>
+                    <a class="friend-action" id="add-friend-<%= use.id %>" href="/add-friend/<%= use.id %>">Add Friend</a>
                 </li>
                 <% } %>
             <% } %>

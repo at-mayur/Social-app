@@ -35,6 +35,7 @@
         </div>
 
         <div id="chat-section">
+            <%- include('./layouts/_chatSection'); %>
 
         </div>
         
@@ -44,6 +45,14 @@
 
 
 <script src="/scripts/homeScript.js"></script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
+<script src="/scripts/chat_socket.js"></script>
+<% if(locals.user){ %>
+    <script>
+        let user= '<%- JSON.stringify(user) %>'; 
+        new ClientSocket("user-chat-box", "<%= user.email %>");
+    </script>
+<% } %>
 
 
 
