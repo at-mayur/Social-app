@@ -32,6 +32,7 @@
                     </p>
                 </li>
             <% } %>
+            <hr>
             <% for(let use of user.friendRequests){ %>
                 <li id="accept-<%= use.id %>" class="accept-request">
                     <div class="user-img">
@@ -47,6 +48,7 @@
                     <a class="friend-action" id="request-accept-<%= use.id %>" href="/accept-request/<%= use.id %>">Accept</a>
                 </li>
             <% } %>
+            <hr>
             <% for(let use of user.requestSent){ %>
                 <li>
                     <div class="user-img">
@@ -62,6 +64,7 @@
                     <p class="request-sent">Request Sent</p>
                 </li>
             <% } %>
+            <hr>
             <% for(let use of users){ %>
                 <% if(use.id!=user.id){ %>
                 <li id="friend-add-<%= use.id %>" class="add-friend">
