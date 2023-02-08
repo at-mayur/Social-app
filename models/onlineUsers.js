@@ -10,6 +10,8 @@ const onlineUsersSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+
+    // making timestamp true to store creation time
 }, { timestamps: true });
 
 const onlineUser = mongoose.model("OnlineUsers", onlineUsersSchema);

@@ -40,6 +40,8 @@ var userSchema = new mongoose.Schema({
             ref: "User"
         }
     ]
+
+    // making timestamp true to store creation time
 }, {timestamps: true});
 
 

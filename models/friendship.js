@@ -9,6 +9,8 @@ const friendShipSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
+
+    // making timestamp true to store creation time
 }, { timestamps: true });
 
 

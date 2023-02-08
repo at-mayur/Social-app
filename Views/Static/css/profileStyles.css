@@ -1,7 +1,10 @@
+/* Styles for profile page  */
+
 body{
     background-color: lightgrey;
 }
 
+/* Styling main conatainer holding profile details */
 #profile-details{
     width: 60%;
     margin: auto;
@@ -18,6 +21,7 @@ body{
     width: 90%;
 }
 
+/* Styles for profile image of user */
 #prof-img{
     width: 100px;
     height: 100px;
@@ -31,11 +35,13 @@ body{
     border-radius: 50%;
 }
 
+
 .edit-user{
     width: 10%;
     box-sizing: border-box;
 }
 
+/* Styling for pencil icon which displays only for user's self profile page */
 .edit-user button{
     display: block;
     font-size: large;
@@ -46,11 +52,12 @@ body{
     margin: 1rem 0;
 }
 
+/* Button is disabled when user is editing form fields. Styles for this. */
 .edit-user button:disabled{
     color: grey;
 }
 
-
+/* Profile details styles. i.e. width, and other styles of input elements */
 #profile-details h3{
     width: 100%;
 }

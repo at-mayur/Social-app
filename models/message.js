@@ -9,7 +9,14 @@ const messageSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true
+    },
+    chat: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Chat",
+        required: true
     }
+
+    // making timestamp true to store creation time
 }, { timestamps: true });
 
 

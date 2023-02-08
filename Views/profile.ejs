@@ -6,31 +6,47 @@
     <div id="profile-details">
         <div class="user-details-section">
             <h3>User Details</h3>
+            <!-- Profile image for user -->
             <div id="prof-img">
                 <% if(locals.profUser && profUser.profile){ %>
                     <img src="<%= profUser.profile %>" alt="<%= profUser.username %>" srcset="">
                 <% }else{ %>
+                    <!-- if profile image is not available then display this default image -->
                     <img src="../upload/profile/defaultDP.svg" alt="<%= profUser.username %>" srcset="">
                 <% } %>
             </div>
             <% if(locals.user && profUser.id==user.id){ %>
+                <!-- If logged user is accessing self profile then display complete form.
+                And User can update self details only. -->
                 <form method="post" action="/profile-update" enctype="multipart/form-data" id="edit-user-form" class="">
+                    <!-- All fields are disabled by default -->
                     <input type="text" name="username" value="<%= profUser.username %>" disabled>
                     <input type="email" name="email" value="<%= profUser.email %>" disabled>
+
+                    <!-- Here user can upload display picture of his choice. -->
                     <label for="#profilePic">Your's Profile Pic</label>
                     <input type="file" id="profilePic" name="profile" disabled >
+
+                    <!-- This field is of hidden type. i.e. It will not display but holds value for current user. -->
                     <input type="hidden" name="userId" value="<%= profUser.id %>">
 
                     <input type="submit" value="Update Details" disabled >
                 </form>
             <% }else{ %>
+                <!-- If current logged user and profile user are different then display only username and email -->
                 <input type="text" name="username" value="<%= profUser.username %>" disabled>
                 <input type="email" name="email" value="<%= profUser.email %>" disabled>
             <% } %>
         </div>
+
+        <!-- If current logged user and profile user are same then display edit and cancel button -->
         <% if(locals.user && user.id==profUser.id){ %>
         <div class="edit-user">
+            <!-- Edit button i.e. pencil icon enabled by default.
+            On clicking all fields will be enabled and user can edit details and on submit details will be updated. -->
             <button type="button" id="write-pen" ><i class="fa-solid fa-pen"></i></button>
+
+            <!-- Cancel button disabled by default. Enabled only after clicking edit button. -->
             <button type="button" id="cancel-edit" disabled><i class="fa-solid fa-xmark"></i></button>
         </div>
         <% } %>

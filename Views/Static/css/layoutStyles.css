@@ -1,7 +1,10 @@
+/* Layout styles common for all pages */
+
 body{
     text-align: center;
 }
 
+/* header styles */
 header{
     display: flex;
     justify-content: space-between;
@@ -25,6 +28,7 @@ header div{
     align-items: center;
 }
 
+/* Styling list for header element and making it as horizontal list */
 header ul{
     list-style: none;
     padding-left: 0;
@@ -47,6 +51,8 @@ header ul li:hover{
     background-color: rgb(37, 60, 158);
 }
 
+
+/* Footer Styles */
 footer{
     display: flex;
     justify-content: space-between;
@@ -70,6 +76,7 @@ footer div{
     align-items: center;
 }
 
+/* Making footer list as a horizontal list */
 footer ul{
     list-style: none;
     padding-left: 0;
@@ -96,6 +103,8 @@ footer ul li:hover{
     background-color: rgb(37, 60, 158);
 }
 
+
+/* Styling sub body section i.e. variable part within layout */
 .sub-body{
     height: 70%;
     margin-bottom: 2%;

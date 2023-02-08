@@ -1,3 +1,6 @@
+/* Form styles for sign in, sign up forms */
+
+/* Styling div containing form. Placing it to center */
 .form-div{
     width: 50%;
     height: 100%;
@@ -12,6 +15,8 @@
     margin-top: 0;
 }
 
+
+/* Styling form. Arranging all elements to center */
 form{
     width: 80%;
     margin: 2rem auto;
@@ -22,6 +27,7 @@ form{
     box-sizing: border-box;
 }
 
+/* Styling input elements */
 form input{
     font-size: 1em;
     line-height: 1.5;
@@ -31,6 +37,7 @@ form input{
 
 }
 
+/* Styles for social auth G icon below form */
 .social-auth{
     font-size: 1.5rem;
 }

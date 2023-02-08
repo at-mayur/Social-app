@@ -3,9 +3,12 @@
 
 <div class="sub-body">
     
+    <!-- Container for home page holds all elements -->
     <div id="home-container">
 
+
         <div id="add-post-container">
+            <!-- Including add post written within _addPost.ejs -->
             <%- include('./layouts/_addPost'); %>
         </div>
 
@@ -16,11 +19,14 @@
                 <% for(let post of posts){ %>
                 <li id="post-<%= post.id %>">
                     <div class="post">
+                        <!-- Including post from _post.ejs -->
+                        <!-- Also passing post data to that template -->
                         <%- include('./layouts/_post', {post: post}); %>
                     </div>
 
                     
                     <div id="comment-section">
+                        <!-- Including comments partial from _comment.ejs -->
                         <%- include('./layouts/_comment', {post: post}); %>
                     </div>
 
@@ -35,6 +41,7 @@
         </div>
 
         <div id="chat-section">
+            <!-- Including chat Section from file _chatSection.ejs -->
             <%- include('./layouts/_chatSection'); %>
 
         </div>
@@ -43,12 +50,19 @@
     </div>
 </div>
 
-
+<!-- Script tag for adding on click functionality -->
 <script src="/scripts/homeScript.js"></script>
+
+<!-- Using Socket io CDN -->
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
+
+<!-- Script for Client side socket io -->
 <script src="/scripts/chat_socket.js"></script>
+
+<!-- Calling class declared in above script only if user is logged in -->
 <% if(locals.user){ %>
     <script>
+        // Passing current logged user
         let user= '<%- JSON.stringify(user) %>'; 
         new ClientSocket("user-chat-box", "<%= user.email %>");
     </script>

@@ -19,7 +19,7 @@ let likeSchema = new mongoose.Schema({
         required: true,
         enum: ["Post", "Comment"]
     }
-});
+}, { timestamps: true });
 
 
 const like = mongoose.model("Like", likeSchema);

@@ -1,11 +1,16 @@
 
+<!-- Form for adding a new post -->
 <div id="add-post">
     <h2 class="head">Post..</h2>
+
+    <!-- Display new post form if user is logged in -->
     <% if(locals.user){ %>
     <form action="/post/create-post" id="add-post-form" method="post">
         <textarea name="postContent" cols="30" rows="2"></textarea>
         <button type="submit">Post</button>
     </form>
+
+    <!-- Display new post form as disabled if user is not logged in -->
     <% }else{ %>
     <form action="/post/create-post" method="post">
         <textarea name="post-content" cols="30" rows="10" disabled></textarea>
@@ -14,12 +19,17 @@
     <% } %>
 </div>
 
+
+<!-- Current logged users's friend list -->
 <div class="friend-list">
     <h2 class="head">Friends</h2>
+    <!-- Display friend list only if user is logged in -->
     <% if(locals.user){ %>
         <ul>
+
+            <!-- Users friends -->
             <% for(let use of user.friends){ %>
-                <li>
+                <li id="frnd-<%= use.id %>" class="my-friends">
                     <div class="user-img">
                         <% if(use.profile){ %>
                             <img src="<%= use.profile %>" alt="<%= use.username %>" >
@@ -27,12 +37,19 @@
                             <img src="../upload/profile/defaultDP.svg" alt="<%= use.username %>" >
                         <% } %>
                     </div>
+
+                    <!-- Link to users profile -->
                     <p>
                         <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
+
+                    <!-- Chat with friends -->
+                    <a class="friend-action" id="chat-<%= use.id %>" href="/open-chat/<%= use.id %>"><i class="fa-solid fa-comments"></i></a>
                 </li>
             <% } %>
             <hr>
+
+            <!-- Friend requests recived by user -->
             <% for(let use of user.friendRequests){ %>
                 <li id="accept-<%= use.id %>" class="accept-request">
                     <div class="user-img">
@@ -45,10 +62,14 @@
                     <p>
                         <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
+
+                    <!-- Accept request received from other user -->
                     <a class="friend-action" id="request-accept-<%= use.id %>" href="/accept-request/<%= use.id %>">Accept</a>
                 </li>
             <% } %>
             <hr>
+
+            <!-- Friend requests sent by user -->
             <% for(let use of user.requestSent){ %>
                 <li>
                     <div class="user-img">
@@ -65,6 +86,8 @@
                 </li>
             <% } %>
             <hr>
+
+            <!-- Other non friend users for current logged user -->
             <% for(let use of users){ %>
                 <% if(use.id!=user.id){ %>
                 <li id="friend-add-<%= use.id %>" class="add-friend">
@@ -78,6 +101,8 @@
                     <p>
                         <a class="friend-profile-link" href="/profile/<%= use.id %>"><%= use.username %></a>
                     </p>
+
+                    <!-- Send request to other user -->
                     <a class="friend-action" id="add-friend-<%= use.id %>" href="/add-friend/<%= use.id %>">Add Friend</a>
                 </li>
                 <% } %>

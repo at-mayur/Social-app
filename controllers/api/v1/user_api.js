@@ -6,6 +6,7 @@ require("dotenv").config();
 module.exports.createSession = async function(request, response){
 
     try {
+        // finding user using email
         const user = await User.findOne({email: request.body.email});
 
         if(!user || user.password!=request.body.password){
@@ -18,6 +19,7 @@ module.exports.createSession = async function(request, response){
 
         return response.status(200).json({
             msg: "User found..!!",
+            // creating a JWT token
             token: jwt.sign({
                 id: user.id,
                 name: user.username,

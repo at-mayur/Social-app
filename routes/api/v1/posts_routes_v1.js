@@ -6,7 +6,7 @@ const passport = require("passport");
 
 const router = express.Router();
 
-
+// routes for fetching all posts, individual post, delete post
 router.get("/", passport.authenticate('jwt', { session: false }), postApiControllers.fetchAllPosts);
 router.get("/:id", passport.authenticate('jwt', { session: false }), postApiControllers.fetchPostDetails);
 router.get("/delete/:id", passport.authenticate('jwt', { session: false }), postApiControllers.deletePost);

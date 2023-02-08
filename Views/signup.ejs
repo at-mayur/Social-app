@@ -6,17 +6,23 @@
 
         <h1>Sign Up</h1>
 
+        <!-- Sign up form for creating new user -->
         <form action="create-user" method="post">
         
+            <!-- User name field -->
             <input type="text" name="username" placeholder="User Name">
+            <!-- Email field -->
             <input type="email" name="email" placeholder="User email ID">
+            <!-- Password field -->
             <input type="password" name="password" placeholder="Enter Password">
+            <!-- Confirm password field -->
             <input type="password" name="confirmPassword" placeholder="Confirm Your Password">
         
             <input type="submit" value="Sign Up">
         </form>
 
         <div>
+            <!-- Log In using Google -->
             <p>Sign in with :</p>
             <p class="social-auth">
                 <a href="/auth/google"><i class="fa-brands fa-google"></i></a>

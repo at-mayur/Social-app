@@ -22,6 +22,8 @@ const postSchema = new mongoose.Schema({
             ref: "Like"
         }
     ]
+
+    // making timestamp true to store creation time
 }, {
     timestamps: true
 });

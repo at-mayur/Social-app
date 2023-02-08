@@ -3,8 +3,10 @@ const nodemailer = require("../config/nodemailer");
 
 module.exports.mailComment = function(comment){
 
+    // Fetching email template from function declared while configuring transport for nodemailer
     let mailBody = nodemailer.getTemplate({ comment: comment }, "comment/newComment.ejs");
 
+    // Sending mail
     nodemailer.transporter.sendMail({
         from: "mayureshattarde@gmail.com",
         to: comment.post.user.email,

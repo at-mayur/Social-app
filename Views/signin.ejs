@@ -5,16 +5,19 @@
     <div class="form-div">
         <h1>Sign In</h1>
 
+        <!-- Sign in form -->
         <form action="/create-session" method="post">
 
-        
+            <!-- email field -->
             <input type="email" name="email" placeholder="Enter email ID">
+            <!-- password field -->
             <input type="password" name="password" placeholder="Enter Password">
         
             <input type="submit" value="Sign In">
         </form>
 
         <div>
+            <!-- Anthetication using Google -->
             <p>Sign in with :</p>
             <p class="social-auth">
                 <a href="/auth/google"><i class="fa-brands fa-google"></i></a>

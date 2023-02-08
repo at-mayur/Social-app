@@ -1,13 +1,19 @@
 {
 
+    // Add some event listeners to our actions to prevent page refresh for every action
     $(document).ready(function(){
         let postList = $("#post-list > li");
 
+        // Adding event listeners to posts action i.e.
+        // Adding comment, delete post, like post
         for(let postLi of postList){
             // console.log(postLi.id.split("-")[1]);
             let postId = postLi.id.split("-")[1];
+            // for delete post
             deletePost(`post-delete-${postId}`);
+            // for create comment
             createComment(`add-comment-form-${postId}`);
+            // for liking post
             likePost(postId);
 
             let commentList = $(`#${postId} > li`);
@@ -16,22 +22,36 @@
                 // console.log(commentLi.id);
                 let commentId = commentLi.id;
 
+                // For delete comment
                 deleteComment(`comment-delete-${commentId}`);
+
+                // for liking a comment
                 likeComment(commentId);
             }
 
             
         }
 
+        // For message action for friends
+        let myFriends = $(".my-friends > .friend-action");
+
+        for(let frnd of myFriends){
+            // let id = frnd.id.split('-')[1];
+
+            // Add event listener to open chat on clicking msg icon
+            openChat(frnd);
+        }
 
         let requestAccept = $(".accept-request");
 
+        // For accepting frnd request
         for(let accReq of requestAccept){
             let id = accReq.id.split('-')[1];
 
             acceptRequest(id);
         }
 
+        // For sending frnd request
         let friendAdd = $(".add-friend");
 
         for(let addFr of friendAdd){
@@ -40,6 +60,7 @@
             addFriend(id);
         }
 
+        // Open  chat for previous chats
         let pastChats = $("#user-past-chats li > a");
 
         for(let pastChat of pastChats){
@@ -51,19 +72,25 @@
 
 
 
+    // Function adding event listener to open chats
     function openChat(elem){
         elem.addEventListener("click", function(event){
+            // Prevent default action
             event.preventDefault();
 
+            // Send ajax request
             $.ajax({
                 method: "GET",
                 url: elem.getAttribute("href"),
                 success: function(data){
                     if(data.chat){
                         let chat = data.chat;
+
+                        // Fetch msg list and user name showing elements
                         let chatList = $("#chat-messages-list");
                         let chatUser = $("#user-chat-username");
 
+                        // Set there values
                         $("#current-chat").val(chat._id);
 
                         if(chat.user1._id==data.currUser._id){
@@ -75,8 +102,10 @@
                             $("#msg-send-usr").val(chat.user1._id);
                         }
 
+                        // Fetch messages from chat and add them to chatbox
                         for(let message of chat.chatMessages){
                             let newLi = "";
+                            // left align for self msgs
                             if(message.user==data.currUser._id){
                                 newLi = `
                                     <li class="left-align">
@@ -84,6 +113,7 @@
                                     </li>
                                 `;
                             }
+                            // right align for friend msgs
                             else{
                                 newLi = `
                                     <li class="right-align">
@@ -114,40 +144,51 @@
         });
     }
 
+    // click event listener for close button on chat box
     $("#user-chat-box-close").click(function(event){
+        // prevent default actions
         event.preventDefault();
+
 
         let chatList = $("#chat-messages-list");
         let chatUser = $("#user-chat-username");
 
+        // Clear msg list and username
         chatList.empty();
         chatUser.text("User Name");
 
+        // Clear values for chat id
         $("#msg-send-usr").val("");
         $("#current-chat").val("");
 
+        // remove class which makes chat box visible
         $("#user-chat-box").removeClass("open-chat");
 
     });
 
 
 
-
+    // Post Like action
     let likePost = function(pstLikeId){
+        // fetch post's like button
         let likeBtn = $(`#post-like-${pstLikeId}`);
 
         likeBtn.click(function(event){
+            // prevent default action
             event.preventDefault();
 
+            // Send new ajax request
             $.ajax({
                 method: "GET",
                 url: likeBtn.prop("href"),
                 success: function(data){
+                    // if like added then increase likes count and change like icon
                     if(data.likeAdded){
                         likeBtn.html(`<i class="fa-solid fa-thumbs-up"></i>`);
                         let count = $(`#post-like-count-${pstLikeId}`).text();
                         $(`#post-like-count-${pstLikeId}`).text(++count);
                     }
+                    // if like removed then decrement likes count and change like icon
                     else{
                         likeBtn.html(`<i class="fa-regular fa-thumbs-up"></i>`);
                         let count = $(`#post-like-count-${pstLikeId}`).text();
@@ -164,22 +205,28 @@
         })
     }
 
+    // Comment Like action
     let likeComment = function(cmtLikeId){
+        // fetch comment's like button
         let likeBtn = $(`#comment-like-${cmtLikeId}`);
 
         likeBtn.click(function(event){
+            // prevent default action
             event.preventDefault();
 
+            // Send new ajax request
             $.ajax({
                 method: "GET",
                 url: likeBtn.prop("href"),
                 success: function(data){
+                    // if like added then increase likes count and change like icon
                     if(data.likeAdded){
                         likeBtn.removeClass("grey");
                         likeBtn.addClass("blue");
                         let count = $(`#comment-like-count-${cmtLikeId}`).text();
                         $(`#comment-like-count-${cmtLikeId}`).text(++count);
                     }
+                    // // if like removed then decrement likes count and change like icon
                     else{
                         likeBtn.removeClass("blue");
                         likeBtn.addClass("grey");
@@ -197,22 +244,35 @@
     }
 
 
-
+    // Action on post creation
     let createPost = function(){
+        // fetch add post form
         let addPostForm = $("#add-post-form");
 
         addPostForm.on("submit", function(event){
+            // Prevent default action
             event.preventDefault();
         
+            // Send new ajax request
             $.ajax({
                 type: "post",
                 url: "/post/create-post",
+                // serialize() fetch all field values like request.body
                 data: addPostForm.serialize(),
                 success: function(data){
+                    // create new li element for new post
                     let newPost = postItem(data.post);
+
+                    // Prepend it to posts list
                     $("#post-list").prepend(newPost);
+
+                    // Add action for delete button
                     deletePost(`post-delete-${data.post._id}`);
+
+                    // Action for like button
                     likePost(data.post._id);
+
+                    // Action for adding comment
                     createComment(`add-comment-form-${data.post._id}`);
                     // console.log(data);
                 },
@@ -223,6 +283,7 @@
         });
     };
 
+    // Action on comment creation
     function createComment(commentFormLink){
         let addCommentForm = $(`#${commentFormLink}`);
 
@@ -235,9 +296,16 @@
                 data: addCommentForm.serialize(),
                 success: function(data){
                     // console.log(data.comment.post);
+                    // create new li element for comment
                     let newComment = commentItem(data.comment);
+
+                    // Prepend new li to comments list
                     $(`#${ data.comment.post._id }`).prepend(newComment);
+
+                    // Action for delete comment button
                     deleteComment(`comment-delete-${data.comment._id}`);
+
+                    // Action for like coment button
                     likeComment(data.comment._id);
                     // console.log(data);
                 },
@@ -249,6 +317,7 @@
         });
     }
 
+    // Delete post action
     function deletePost(postId){
         let postDel = $(`#${postId}`);
         // console.log(postDel);
@@ -260,6 +329,7 @@
                 method: "GET",
                 url: postDel.prop("href"),
                 success: function(data){
+                    // remove post
                     $(`#post-${data.post}`).remove();
                 },
                 error: function(err){
@@ -269,6 +339,7 @@
         });
     }
 
+    // Delete action for comment
     function deleteComment(commentId){
         let commentDel = $(`#${commentId}`);
 
@@ -281,6 +352,7 @@
                 url: commentDel.prop("href"),
                 success: function(data){
                     // console.log(data);
+                    // Remove comment
                     $(`#${data.comment}`).remove();
                 },
                 error: function(err){
@@ -290,6 +362,7 @@
         });
     }
 
+    // Creates new comment li element and return
     function commentItem(comment){
         // console.log(comment);
         return `
@@ -313,6 +386,7 @@
         `;
     }
 
+    // Creates new Post li element and return
     function postItem(post){
         // console.log(post);
 
@@ -366,7 +440,7 @@
 
 
 
-
+    // Action for accepting request
     function acceptRequest(id){
         let elem = $(`#request-accept-${id}`);
 
@@ -378,7 +452,15 @@
                 url: elem.prop("href"),
                 success: function(data){
                     // console.log(data);
+                    // Remove accept button after accepting request
                     elem.remove();
+
+                    // Create and append new start chat button
+                    let startChat = `<a class="friend-action" id="chat-${id}" href="/open-chat/${id}"><i class="fa-solid fa-comments"></i></a>`;
+                    $(`#accept-${id}`).append(startChat);
+
+                    // Modify that start chat buttons default actions
+                    openChat(document.getElementById(`chat-${id}`));
                 },
                 error: function(err){
                     console.log(err);
@@ -388,6 +470,7 @@
     }
 
 
+    // Sending frnd request action
     function addFriend(id){
         let elem = $(`#add-friend-${id}`);
 
@@ -399,7 +482,10 @@
                 url: elem.prop("href"),
                 success: function(data){
                     // console.log(data);
+                    // Remove Add friend button
                     elem.remove();
+
+                    // Add request sent
                     $(`#friend-add-${id}`).append(`<p class="request-sent">Request Sent</p>`);
                 },
                 error: function(err){
@@ -410,6 +496,7 @@
     }
 
 
+    // Calling create post action on page load
     createPost();
 
 }

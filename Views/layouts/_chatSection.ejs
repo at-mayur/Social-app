@@ -1,10 +1,16 @@
+
+<!-- Chat section for user -->
 <div class="user-chats">
+
+    <!-- Div to show current active users for the current user -->
     <div class="current-active">
         <h3>Active</h3>
         <ul id="active-users-list">
             
         </ul>
     </div>
+
+    <!-- Div showing list of previous chats with friends -->
     <div class="friend-list">
         <h3>Chats</h3>
         <ul id="user-past-chats">
@@ -22,7 +28,10 @@
                             <%= chat.user2.username %>
                         </p>
                         
+                        <!-- Open chat -->
                         <a class="friend-action" id="chat-<%= chat.user2.id %>" href="/open-chat/<%= chat.user2.id %>"><i class="fa-solid fa-comments"></i></a>
+
+                        <!-- Notification Dot on new msg -->
                         <p class="notification-dot"><i class="fa-solid fa-circle"></i></p>
                     <% }else{ %>
                         <div class="user-img">
@@ -46,21 +55,33 @@
     </div>
 </div>
 
+
+<!-- Chat box. Here all chats open -->
 <div id="user-chat-box" class="user-chat">
+
+    <!-- Header holding friend's name. Close button. -->
     <div class="user-chat-header">
-        <input type="text" id="current-chat" hidden >
+        <!-- This input holds chat id for current chat open in box -->
+        <input type="hidden" id="current-chat" >
+
         <h4 id="user-chat-username">User Name</h4>
         <a id="user-chat-box-close" class="close-chat" href=""><i class="fa-regular fa-circle-xmark"></i></a>
     </div>
+
+    <!-- This div holds messages list. Self msgs left aligned and friends msgs right aligned -->
     <div class="user-chat-messages">
         <ul id="chat-messages-list">
             
             
         </ul>
     </div>
+
+    <!-- Sending msg to friend -->
     <div class="user-chat-send">
         <textarea id="currUser-message" cols="20" rows="2"></textarea>
-        <input type="text" id="msg-send-usr" hidden >
+
+        <!-- This holds users id to whom msg needs to be sent -->
+        <input type="hidden" id="msg-send-usr"  >
         <button id="message-send-btn" type="button">Send</button>
     </div>
 </div>

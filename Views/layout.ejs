@@ -2,38 +2,63 @@
     <head>
         <title><%= title %></title>
         <link rel="stylesheet" href="/css/layoutStyles.css">
+
+        <!-- This is the layout page which will be common for all templates.
+        We have used separate stylesheets for different templates.
+        While rendering page all these are combined and StyleSheets from that templates will include here. -->
         <%- style %>
+
+
+        <!-- Script tag for font Awesome icons -->
         <script src="https://kit.fontawesome.com/b3348ae33f.js" crossorigin="anonymous"></script>
         
+        <!-- Styles and Script cdn for noty js -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
 
+        <!-- CDN for JQuery -->
         <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 
     </head>
     <body>
+        <!-- _header.ejs will be included here -->
         <%- include('./layouts/_header'); %>
 
+        <!-- Body will display individual page template -->
+        <!-- i.e. home.ejs, profile.ejs, signin, signup -->
         <%- body %>
 
+        <!-- _footer.ejs will be included here -->
         <%- include('./layouts/_footer'); %>
 
 
+        <!-- This is the layout page which will be common for all templates.
+        We have used separate Scripts for different templates.
+        While rendering page all these are combined and Scripts from that templates will include here. -->
         <%- script %>
 
-        <script>
-            <% if(locals.messages && messages.success.length > 0) { %>
+        <!-- Below code is for displaying flash messages using noty.js -->
+        <% if(locals.messages && messages.success.length > 0) { %>
+            <script>
                 new Noty({
+                    // There are various themes available for noty js. It will define appearance of msg.
                     theme: 'relax',
+                    // Color for msg varries according to type
                     type: 'success',
+                    // Layout defines position of noty js msg
                     layout: 'topRight',
+                    // text defines msg for noty js
                     text: '<%= messages.success %>',
-                    timeout: 2000,
+                    // Time out defines time in miliSeconds after which msg will disappear
+                    timeout: 1000,
+                    // Progress bar displays progress bar for time
                     progressBar: true
                 }).show();
-            <% } %>
+            </script>
+        <% } %>
 
-            <% if(locals.messages && messages.error.length > 0) { %>
+        <% if(locals.messages && messages.error.length > 0) { %>
+            <script>
                 new Noty({
                     theme: 'relax',
                     type: 'error',
@@ -42,19 +67,21 @@
                     timeout: 2000,
                     progressBar: true
                 }).show();
-            <% } %>
+            </script>
+        <% } %>
 
-            <% if(locals.messages && messages.info.length > 0) { %>
+        <% if(locals.messages && messages.info.length > 0) { %>
+            <script>
                 new Noty({
                     theme: 'relax',
                     type: 'info',
                     layout: 'topRight',
                     text: '<%= messages.info %>',
-                    timeout: 2000,
+                    timeout: 1000,
                     progressBar: true
                 }).show();
-            <% } %>
-        </script>
+            </script>
+        <% } %>
             
     </body>
 </html>

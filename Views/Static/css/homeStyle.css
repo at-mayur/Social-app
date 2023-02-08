@@ -1,3 +1,4 @@
+/* Styles for main container holding all 3 div. i.e. post section, add post, chat section */
 #home-container{
     width: 96%;
     height: 100%;
@@ -8,6 +9,8 @@
     box-sizing: border-box;
 }
 
+/* Setting width and height for all 3 sub sections */
+/* add post section holding add post form and friend list */
 #add-post-container{
     background-color: lightgrey;
     width: 20%;
@@ -15,6 +18,7 @@
     border-radius: 10px;
 }
 
+/* chat section holding active users, past chats, chat box */
 #chat-section{
     width: 20%;
     height: 100%;
@@ -22,6 +26,7 @@
     border-radius: 10px;
 }
 
+/* post container holding posts and comments */
 #post-container{
     background-color: lightgrey;
     width: 58%;
@@ -34,6 +39,7 @@
     color: rgb(1, 1, 1);
 }
 
+/* post list styles. Adding overflow scroll */
 .post-list{
     list-style: none;
     padding-left: 0;
@@ -42,10 +48,12 @@
     overflow: scroll;
 }
 
+/* hiding scrollbar */
 .post-list::-webkit-scrollbar{
     display: none;
 }
 
+/* Styling li element holding post and respective comments */
 .post-list li{
     margin: 0.4rem 0.2rem;
     padding-bottom: 0.5rem;
@@ -54,6 +62,7 @@
     border-radius: 5px;
 }
 
+/* this div contains post related data */
 .post{
     display: flex;
     justify-content: space-around;
@@ -86,6 +95,7 @@
     width: 55%;
 }
 
+/* Div holding likes and count */
 .like-div{
     margin-left: 1rem;
 }
@@ -100,10 +110,12 @@
     transform: scale(1.2);
 }
 
+/* add comment form holding division */
 .post-comment{
     width: 40%;
 }
 
+/* Post delete button at last */
 .post-delete{
     width: 5%;
     box-sizing: border-box;
@@ -116,6 +128,7 @@
     text-decoration: none;
 }
 
+/* Styles for add comment form */
 .post-comment input{
     padding: 0.5rem;
     border-radius: 0.8rem;
@@ -126,12 +139,15 @@
     border-radius: 0.5rem;
 }
 
+
+/* Styling comments list */
 .comment-list{
     list-style: none;
     padding-left: 0;
     box-sizing: border-box;
 }
 
+/* li elements for comments */
 .comment-list li{
     margin: 0rem 0.2rem;
     padding: 0 0.2rem 0.4rem 0.4rem;
@@ -146,6 +162,7 @@
     width: 95%;
 }
 
+/* Comment likes */
 .comment .like-div{
     margin-left: 0.5rem;
     margin-top: 0.5rem;
@@ -161,6 +178,7 @@
     text-decoration: none;
 }
 
+/* Colors for like. Grey if not liked. Blue for Like. */
 .grey{
     color: grey;
 }
@@ -169,6 +187,7 @@
     color: navy;
 }
 
+/* Delete button for comment */
 .comment-delete{
     width: 5%;
     box-sizing: border-box;
@@ -191,12 +210,14 @@
 }
 
 
+/* Styles for add post container */
 #add-post-container{
     padding: 0 0.5rem 0.5rem 0.5rem;
     box-sizing: border-box;
     text-align: start;
 }
 
+/* Styles for add post form */
 #add-post-container textarea{
     width: 80%;
     display: block;
@@ -209,11 +230,14 @@
     padding: 0.3rem 0.5rem;
 }
 
+/* Setting height for add post form section */
 #add-post{
     height: 30%;
     box-sizing: border-box;
 }
 
+
+/* Styles for friends list. This styles apply for past chats list section from chat section */
 .friend-list{
     height: 65%;
     margin-top: 0.7rem;
@@ -225,6 +249,7 @@
     margin-top: 0;
 }
 
+/* Setting fixed height for list and setting overflow scroll */
 .friend-list ul{
     height: 80%;
     margin-top: 0;
@@ -234,10 +259,13 @@
     overflow: scroll;
 }
 
+/* hiding scrollbar */
 .friend-list ul::-webkit-scrollbar{
     display: none;
 }
 
+/* styling li element of friend list.
+Using flex to align elements properly */
 .friend-list ul li{
     padding: 0.5rem 0.2rem;
     margin: 0.2rem;
@@ -248,6 +276,7 @@
     align-items: center;
 }
 
+/* Styles for a tags used for sending request, Accept request. */
 .friend-list ul li .friend-action{
     text-decoration: none;
     padding: 0.3rem;
@@ -261,6 +290,7 @@
     background-color: grey;
 }
 
+/* On clicking add friend i.e. after sending friend request styles */
 .friend-list ul li .request-sent{
     padding: 0.3rem;
     background-color: rgb(72, 81, 130);
@@ -269,6 +299,7 @@
     text-align: center;
 }
 
+/* Styles for user name pointing to user profile */
 .friend-list ul li .friend-profile-link{
     text-decoration: none;
     color: navy;
@@ -278,6 +309,7 @@
     text-decoration: underline;
 }
 
+/* Styling user's image with round picture */
 .user-img{
     width: 50px;
     height: 50px;
@@ -291,6 +323,9 @@
 }
 
 
+/* Styles for chat section */
+/* position relative for displaying chat box above it */
+/* Overflow hidden to hide chat box. Only display chat box on opening any chat */
 #chat-section{
     position: relative;
     overflow: hidden;
@@ -302,11 +337,13 @@
     box-sizing: border-box;
 }
 
+/* Styles for list holding current active users */
 .user-chats .current-active{
     width: 100%;
     height: 25%;
 }
 
+/* Past chats list */
 .user-chats .friend-list{
     width: 100%;
     height: 70%;
@@ -317,12 +354,14 @@
     color: navy;
 }
 
+/* Styling image for active users */
 .active-user img{
     width: 40px;
     height: 40px;
-    border-radius: 25px;
+    border-radius: 20px;
 }
 
+/* p holding username of active user */
 .active-user p{
     margin: 0.5rem;
 }
@@ -332,6 +371,7 @@
     padding-left: 1rem;
 }
 
+/* Styles to make current active list a horizontal list */
 .current-active ul{
     list-style: none;
     margin: 0;
@@ -347,16 +387,21 @@
     display: none;
 }
 
+/* Display inline block to make elements appear next to each other */
 .current-active ul li{
     display: inline-block;
     margin: 0.2rem;
 }
 
+/* Hiding notification dot when no new msg */
 #user-past-chats .notification-dot{
     color: green;
     display: none;
 }
 
+/* Chat box styles. Position absolute i.e. it will have position w.r.t. chat section  */
+/* Initially has no top, bottom, left, right values i.e. it is overflowing and overflow is hidden for chat section.
+Hence this chat box is invisible initially */
 .user-chat{
     width: 100%;
     height: 70%;
@@ -368,6 +413,7 @@
     transition: all 0.5s;
 }
 
+/* We toggle this class to chat box after clicking any chat. i.e. chat box will be visible */
 .open-chat{
     bottom: 0;
 }
@@ -394,6 +440,7 @@
     height: 70%;
 }
 
+/* Chat messages list styles */
 .user-chat-messages ul{
     list-style: none;
     margin: 0;
@@ -407,6 +454,7 @@
     display: none;
 }
 
+/* message styles */
 .user-chat-messages ul li{
     max-width: 80%;
     padding: 0.2rem;
@@ -416,6 +464,7 @@
     margin-bottom: 0.2rem;
 }
 
+/* left align styles for self msgs */
 .left-align{
     margin-left: auto;
     margin-right: 0.2rem;
@@ -423,6 +472,7 @@
     color: white;
 }
 
+/* right align for msgs from friend */
 .right-align{
     margin-left: 0.2rem;
     margin-right: auto;
@@ -430,6 +480,7 @@
     color: white;
 }
 
+/* Styling elements sending msgs */
 .user-chat-send{
     width: 100%;
     height: 20%;
@@ -444,6 +495,7 @@
     width: 80%;
 }
 
+/* Send msg button */
 .user-chat-send button{
     padding: 0.2rem;
     font-size: 14px;
@@ -451,6 +503,8 @@
     color: white;
 }
 
+
+/* Media queries for adjusting application to lower screen sizes */
 @media screen and (max-width: 1100px) {
 
     #post-container{
