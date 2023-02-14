@@ -6,6 +6,14 @@ const Friendship = require("../models/friendship");
 const FriendRequest = require("../models/friendRequest");
 const Chat = require("../models/chat");
 const Message = require("../models/message");
+
+// Reaction models
+const Love = require("../models/love");
+const Haha = require("../models/haha");
+const Wow = require("../models/wow");
+const Sad = require("../models/sad");
+const Angry = require("../models/angry");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -22,34 +30,49 @@ async function homeController(request, response){
         .populate({
             path: 'comments',
             options: { sort: '-createdAt' },
-            populate: {
+            // Using multiple path population
+            populate: [{
                 path: "user",
                 select: "_id username email"
+            },
+            // Second path to populate reactions on comments with desc sort then again populating users for that reactions
+            {
+                path: "likes loves hahas wows sads angrys",
+                options: { sort: "-createdAt" },
+                populate: {
+                    path: "user",
+                    select: "username profile"
+                }
+            }]
+        })
+        // Populating reactions for post with desc sort then again populating users for that reactions
+        .populate({
+            path: "likes loves hahas wows sads angrys",
+            options: { sort: "-createdAt" },
+            populate: {
+                path: "user",
+                select: "username profile"
             }
         });
 
 
         for(let post of posts){
             // finding if current user liked this post
-            let likeFound = await Like.findOne({ user: request.user.id, target: post.id });
+            let reaction = await getReaction(request, post.id);
+            post.reaction = reaction;
 
-            if(likeFound){
-                post.like = true;
-            }
-            else{
-                post.like = false;
-            }
+
+            post.reactCount = post.likes.length + post.loves.length + post.hahas.length
+                                + post.wows.length + post.sads.length + post.angrys.length;
+
 
             // finding if user has liked any comment on this post
             for(let comment of post.comments){
-                let likeFound = await Like.findOne({ user: request.user.id, target: comment.id });
+                let cmtReaction = await getReaction(request, comment.id);
+                comment.reaction = cmtReaction;
 
-                if(likeFound){
-                    comment.like = true;
-                }
-                else{
-                    comment.like = false;
-                }
+                comment.reactCount = comment.likes.length + comment.loves.length + comment.hahas.length
+                                + comment.wows.length + comment.sads.length + comment.angrys.length;
             }
 
         }
@@ -104,6 +127,56 @@ async function homeController(request, response){
     
     
 }
+
+
+
+
+// Functions to get reaction on post or comment
+async function getReaction(request, targetId){
+
+    try {
+        // Set default value for reaction none
+        let reaction = "none";
+        
+        // Get reaction from DB
+        let likeFound = await Like.findOne({ user: request.user.id, target: targetId });
+        let loveFound = await Love.findOne({ user: request.user.id, target: targetId });
+        let hahaFound = await Haha.findOne({ user: request.user.id, target: targetId });
+        let wowFound = await Wow.findOne({ user: request.user.id, target: targetId });
+        let sadFound = await Sad.findOne({ user: request.user.id, target: targetId });
+        let angryFound = await Angry.findOne({ user: request.user.id, target: targetId });
+
+        // if any of reaction exists then update reaction value
+        if(likeFound){
+            reaction = "like";
+        }
+        else if(loveFound){
+            reaction = "love";
+        }
+        else if(hahaFound){
+            reaction = "haha";
+        }
+        else if(wowFound){
+            reaction = "wow";
+        }
+        else if(sadFound){
+            reaction = "sad";
+        }
+        else if(angryFound){
+            reaction = "angry";
+        }
+
+
+        return reaction;
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+
+
 
 // controller for fetching profile
 async function profileController(request, response){

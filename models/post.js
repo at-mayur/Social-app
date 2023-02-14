@@ -21,6 +21,36 @@ const postSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Like"
         }
+    ],
+    loves: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Love"
+        }
+    ],
+    hahas: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Haha"
+        }
+    ],
+    wows: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Wow"
+        }
+    ],
+    sads: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Sad"
+        }
+    ],
+    angrys: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Angry"
+        }
     ]
 
     // making timestamp true to store creation time

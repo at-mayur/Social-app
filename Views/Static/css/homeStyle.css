@@ -92,12 +92,15 @@
 }
 
 .post-content{
-    width: 55%;
+    width: 65%;
 }
 
 /* Div holding likes and count */
 .like-div{
+    height: 50px;
     margin-left: 1rem;
+    display: flex;
+    align-items: flex-end;    
 }
 
 .like-div i{
@@ -110,9 +113,16 @@
     transform: scale(1.2);
 }
 
+.likes-count{
+    font-size: 20px;
+    margin-top: 0 !important;
+    margin-bottom: 0;
+    margin-left: 2rem !important;
+}
+
 /* add comment form holding division */
 .post-comment{
-    width: 40%;
+    width: 30%;
 }
 
 /* Post delete button at last */
@@ -503,6 +513,209 @@ Hence this chat box is invisible initially */
     color: white;
 }
 
+/* Styles for reactions */
+
+.container{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* Styling like button */
+.container > a{
+    padding: 0.3rem 0;
+    background-color: lightgrey;
+    border-radius: 5px;
+}
+
+/* Styling div holding all reactions */
+.emoji-container{
+    width: 270px;
+    height: 30px;
+    border: 2px solid black;
+    border-radius: 70px;
+    display: none;
+}
+
+.emoji{
+    position: relative;
+}
+
+/* Styling individual reaction */
+.emoji img{
+    width: 40px;
+    height: 40px;
+}
+
+/* Style reaction name */
+.emoji p{
+    position: absolute;
+    padding: 5px 10px;
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    border-radius: 20px;
+    top: -40px;
+    visibility: hidden;
+}
+
+.emoji img:hover{
+    transform: scale(1.2);
+}
+
+/* Display reaction name on hover */
+.emoji a:hover ~ p{
+    visibility: visible;
+}
+
+/* Matching 2 images with higher resolution with other emojis */
+.extra img{
+    width: 25px;
+    height: 25px;
+}
+
+.extra p{
+    top: -45px;
+}
+
+/* Styling like btn */
+
+.post-like-btn img{
+    width: 25px;
+    height: 25px;
+}
+
+/* Styling counter display */
+.likes-count img{
+    width: 20px;
+    height: 20px;
+}
+
+.likes-count i{
+    font-size: 15px;
+}
+
+
+/* Styles for reaction details list */
+/* main conainer */
+.reaction-count-display{
+    display: flex;
+    flex-direction: column;
+}
+
+.reactions-container{
+    width: 100px;
+    height: 100px;
+    background-color: lightgrey;
+    border-radius: 10px;
+    box-sizing: border-box;
+    z-index: -1;
+    display: none;
+}
+
+.react-content{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* buttons styles which navigates to different reactions added */
+.react-added{
+    width: 100%;
+    height: 15%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.react-added button{
+    background: transparent;
+    border: none;
+}
+
+/* Show bottom border for button on focus event */
+.react-added button:focus{
+    border-bottom: 1px solid green;
+}
+
+.react-added button img{
+    width: 25px;
+    height: 25px;
+}
+
+.react-added button i{
+    font-size: 12px;
+}
+
+.react-lists-container{
+    width: 100%;
+    height: 85%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.react-list{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    transition: left 0.5s;
+    position: absolute;
+    display: none;
+}
+
+/* Reaction name */
+.react-list h5{
+    margin: 0;
+    height: 15%;
+    box-sizing: border-box;
+    padding: 5px;
+    font-size: small;
+}
+
+/* List holding users who reacted */
+.react-list ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    height: 80%;
+    overflow: scroll;
+    box-sizing: border-box;
+    padding: 0 5px;
+    margin-bottom: 5px;
+}
+
+.react-list ul::-webkit-scrollbar{
+    display: none;
+}
+
+.react-list ul li{
+    box-sizing: border-box;
+    padding: 3px 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid black;
+    margin: 3px 5px;
+}
+
+.react-list ul li p{
+    margin: 0;
+}
+
+.react-list h5{
+    background: transparent;
+    color: black;
+}
+
+.react-list ul li img{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+}
+
 
 /* Media queries for adjusting application to lower screen sizes */
 @media screen and (max-width: 1100px) {
@@ -527,6 +740,10 @@ Hence this chat box is invisible initially */
     #chat-section{
         width: 100%;
         margin-top: 1rem;
+    }
+
+    .like-div{
+        margin-bottom: 1rem;
     }
 
 }

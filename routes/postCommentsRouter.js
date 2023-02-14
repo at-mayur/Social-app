@@ -17,5 +17,21 @@ router.get("/delete-comment/:id", passport.checkAuthentication, postController.d
 router.get("/post-like/:id", passport.checkAuthentication, postController.likePost);
 router.get("/comment-like/:id", passport.checkAuthentication, postController.likeComment);
 
+// Routes for reacting on a post or a comment
+router.get("/post-love/:id", passport.checkAuthentication, postController.loveReactPost);
+router.get("/comment-love/:id", passport.checkAuthentication, postController.loveReactComment);
+
+router.get("/post-haha/:id", passport.checkAuthentication, postController.hahaReactPost);
+router.get("/comment-haha/:id", passport.checkAuthentication, postController.hahaReactComment);
+
+router.get("/post-wow/:id", passport.checkAuthentication, postController.wowReactPost);
+router.get("/comment-wow/:id", passport.checkAuthentication, postController.wowReactComment);
+
+router.get("/post-sad/:id", passport.checkAuthentication, postController.sadReactPost);
+router.get("/comment-sad/:id", passport.checkAuthentication, postController.sadReactComment);
+
+router.get("/post-angry/:id", passport.checkAuthentication, postController.angryReactPost);
+router.get("/comment-angry/:id", passport.checkAuthentication, postController.angryReactComment);
+
 
 module.exports = router;

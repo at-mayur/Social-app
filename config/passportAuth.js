@@ -47,6 +47,7 @@ passport.deserializeUser(function(id, done){
             console.log("User not found");
             return done(null, false);
         }
+        user.password = "";
         return done(null, user);
     });
 });

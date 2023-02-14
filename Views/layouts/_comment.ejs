@@ -14,14 +14,275 @@
 
             <!-- Showing like for comment from current user -->
             <div class="like-div">
-                <% if(comment.like){ %>
-                    <span class="like-span"><a id="comment-like-<%= comment.id %>" class="blue" href="/post/comment-like/<%= comment.id %>">Like</a></span>
-                <% }else{ %>
-                    <span class="like-span"><a id="comment-like-<%= comment.id %>" class="grey" href="/post/comment-like/<%= comment.id %>">Like</a></span>
-                <% } %>
-                
+
+                <!-- Reaction container -->
+                <div class="container">
+                    <div class="content">
+                        <!-- Container holding all reactions -->
+                        <div id="emoji-container-comment-<%= comment.id %>" class="emoji-container">
+                            <!-- Div holding individual reaction -->
+                            <div class="emoji">
+                                <a id="comment-like-<%= comment.id %>" href="/post/comment-like/<%= comment.id %>">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                </a>
+                                <p>Like</p>
+                            </div>
+                            <div class="emoji">
+                                <a id="comment-love-<%= comment.id %>" href="/post/comment-love/<%= comment.id %>">
+                                    <img src="/images/Love.gif" alt="">
+                                </a>
+                                <p>Love</p>
+                            </div>
+                            <div class="emoji">
+                                <a id="comment-haha-<%= comment.id %>" href="/post/comment-haha/<%= comment.id %>">
+                                    <img src="/images/Haha.gif" alt="">
+                                </a>
+                                <p>Haha</p>
+                            </div>
+                            <div class="emoji extra">
+                                <a id="comment-wow-<%= comment.id %>" href="/post/comment-wow/<%= comment.id %>">
+                                    <img src="/images/Wow.gif" alt="">
+                                </a>
+                                <p>Wow</p>
+                            </div>
+                            <div class="emoji extra">
+                                <a id="comment-sad-<%= comment.id %>" href="/post/comment-sad/<%= comment.id %>">
+                                    <img src="/images/Sad.gif" alt="">
+                                </a>
+                                <p>Sad</p>
+                            </div>
+                            <div class="emoji">
+                                <a id="comment-angry-<%= comment.id %>" href="/post/comment-angry/<%= comment.id %>">
+                                    <img src="/images/Angry.gif" alt="">
+                                </a>
+                                <p>Angry</p>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Like button -->
+                    <% if(comment.reaction && comment.reaction=="like"){ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-like/<%= comment.id %>"><i class="fa-solid fa-thumbs-up"></i></a>
+                    <% }else if(comment.reaction && comment.reaction=="love"){ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-love/<%= comment.id %>"><img src="/images/Love.gif" alt=""></a>
+                    <% }else if(comment.reaction && comment.reaction=="haha"){ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-haha/<%= comment.id %>"><img src="/images/Haha.gif" alt=""></a>
+                    <% }else if(comment.reaction && comment.reaction=="wow"){ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-wow/<%= comment.id %>"><img src="/images/Wow.gif" alt=""></a>
+                    <% }else if(comment.reaction && comment.reaction=="sad"){ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-sad/<%= comment.id %>"><img src="/images/Sad.gif" alt=""></a>
+                    <% }else if(comment.reaction && comment.reaction=="angry"){ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-angry/<%= comment.id %>"><img src="/images/Angry.gif" alt=""></a>
+                    <% }else{ %>
+                        <a class="post-like-btn" id="comment-react-<%= comment.id %>" href="/post/comment-like/<%= comment.id %>"><i class="fa-regular fa-thumbs-up"></i></a>
+                    <% } %>
+            
+                </div>
+
                 <!-- Likes count -->
-                <span id="comment-like-count-<%= comment.id %>"><%= comment.likes.length %></span>
+                <div class="reaction-count-display">
+
+                    <!-- Container which will display on mouse over count -->
+                    <div id="reactions-container-comment-<%= comment.id %>" class="reactions-container">
+                        <!-- Container holding icons for the reactions present on the post/comment -->
+                        <div class="react-content">
+                            <div class="react-added" id="comment-react-added-<%= comment.id %>">
+                                <!-- If reaction is present then only add button -->
+                                <% if(comment.likes.length > 0){ %>
+                                    <button type="button" id="comment-like-list-btn-<%= comment.id %>">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                    </button>
+                                <% } %>
+                                
+                                <% if(comment.loves.length > 0){ %>
+                                    <button type="button" id="comment-love-list-btn-<%= comment.id %>">
+                                        <img src="/images/Love.gif" alt="">
+                                    </button>
+                                <% } %>
+                                
+                                <% if(comment.hahas.length > 0){ %>
+                                    <button type="button" id="comment-haha-list-btn-<%= comment.id %>">
+                                        <img src="/images/Haha.gif" alt="">
+                                    </button>
+                                <% } %>
+                                
+                                <% if(comment.wows.length > 0){ %>
+                                    <button type="button" id="comment-wow-list-btn-<%= comment.id %>">
+                                        <img src="/images/Wow.gif" alt="">
+                                    </button>
+                                <% } %>
+                                
+                                <% if(comment.sads.length > 0){ %>
+                                    <button type="button" id="comment-sad-list-btn-<%= comment.id %>">
+                                        <img src="/images/Sad.gif" alt="">
+                                    </button>
+                                <% } %>
+                                
+                                <% if(comment.angrys.length > 0){ %>
+                                    <button type="button" id="comment-angry-list-btn-<%= comment.id %>">
+                                        <img src="/images/Angry.gif" alt="">
+                                    </button>
+                                <% } %>
+                                
+                            </div>
+                            <!-- Container holding lists of users who reacted for all reactions -->
+                            <div class="react-lists-container" id="comment-react-list-<%= comment.id %>">
+            
+                                <!-- If reaction is present then only add list -->
+                                <% if(comment.likes.length > 0){ %>
+                                    <div id="comment-react-list-like-<%= comment.id %>" class="react-list">
+                                        <h5>Like</h5>
+                                        <ul id="comment-like-list-<%= comment._id %>">
+                                            <% for(let like of comment.likes){ %>
+                                                <li id="comment-like-user-<%= like.user._id %>">
+                                                    <% if(like.user.profile){ %>
+                                                        <img src="<%= like.user.profile %>" alt="<%= like.user.username %>" srcset="">
+                                                    <% }else{ %>
+                                                        <!-- if profile image is not available then display this default image -->
+                                                        <img src="/upload/profile/defaultDP.svg" alt="<%= like.user.username %>" srcset="">
+                                                    <% } %>
+                                                    <p><%= like.user.username %></p>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+            
+                                <% if(comment.loves.length > 0){ %>
+                                    <div id="comment-react-list-love-<%= comment.id %>" class="react-list">
+                                        <h5>Love</h5>
+                                        <ul id="comment-love-list-<%= comment._id %>">
+                                            <% for(let love of comment.loves){ %>
+                                                <li id="comment-love-user-<%= love.user._id %>">
+                                                    <% if(love.user.profile){ %>
+                                                        <img src="<%= love.user.profile %>" alt="<%= love.user.username %>" srcset="">
+                                                    <% }else{ %>
+                                                        <!-- if profile image is not available then display this default image -->
+                                                        <img src="/upload/profile/defaultDP.svg" alt="<%= love.user.username %>" srcset="">
+                                                    <% } %>
+                                                    <p><%= love.user.username %></p>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+            
+                                <% if(comment.hahas.length > 0){ %>
+                                    <div id="comment-react-list-haha-<%= comment.id %>" class="react-list">
+                                        <h5>Haha</h5>
+                                        <ul id="comment-haha-list-<%= comment._id %>">
+                                            <% for(let haha of comment.hahas){ %>
+                                                <li id="comment-haha-user-<%= haha.user._id %>">
+                                                    <% if(haha.user.profile){ %>
+                                                        <img src="<%= haha.user.profile %>" alt="<%= haha.user.username %>" srcset="">
+                                                    <% }else{ %>
+                                                        <!-- if profile image is not available then display this default image -->
+                                                        <img src="/upload/profile/defaultDP.svg" alt="<%= haha.user.username %>" srcset="">
+                                                    <% } %>
+                                                    <p><%= haha.user.username %></p>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+    
+                                <% if(comment.wows.length > 0){ %>
+                                    <div id="comment-react-list-wow-<%= comment.id %>" class="react-list">
+                                        <h5>Wow</h5>
+                                        <ul id="comment-wow-list-<%= comment._id %>">
+                                            <% for(let wow of comment.wows){ %>
+                                                <li id="comment-wow-user-<%= wow.user._id %>">
+                                                    <% if(wow.user.profile){ %>
+                                                        <img src="<%= wow.user.profile %>" alt="<%= wow.user.username %>" srcset="">
+                                                    <% }else{ %>
+                                                        <!-- if profile image is not available then display this default image -->
+                                                        <img src="/upload/profile/defaultDP.svg" alt="<%= wow.user.username %>" srcset="">
+                                                    <% } %>
+                                                    <p><%= wow.user.username %></p>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+    
+                                <% if(comment.sads.length > 0){ %>
+                                    <div id="comment-react-list-sad-<%= comment.id %>" class="react-list">
+                                        <h5>Sad</h5>
+                                        <ul id="comment-sad-list-<%= comment._id %>">
+                                            <% for(let sad of comment.sads){ %>
+                                                <li id="comment-sad-user-<%= sad.user._id %>">
+                                                    <% if(sad.user.profile){ %>
+                                                        <img src="<%= sad.user.profile %>" alt="<%= sad.user.username %>" srcset="">
+                                                    <% }else{ %>
+                                                        <!-- if profile image is not available then display this default image -->
+                                                        <img src="/upload/profile/defaultDP.svg" alt="<%= sad.user.username %>" srcset="">
+                                                    <% } %>
+                                                    <p><%= sad.user.username %></p>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+    
+                                <% if(comment.angrys.length > 0){ %>
+                                    <div id="comment-react-list-angry-<%= comment.id %>" class="react-list">
+                                        <h5>Angry</h5>
+                                        <ul id="comment-angry-list-<%= comment._id %>">
+                                            <% for(let angry of comment.angrys){ %>
+                                                <li id="comment-angry-user-<%= angry.user._id %>">
+                                                    <% if(angry.user.profile){ %>
+                                                        <img src="<%= angry.user.profile %>" alt="<%= angry.user.username %>" srcset="">
+                                                    <% }else{ %>
+                                                        <!-- if profile image is not available then display this default image -->
+                                                        <img src="/upload/profile/defaultDP.svg" alt="<%= angry.user.username %>" srcset="">
+                                                    <% } %>
+                                                    <p><%= angry.user.username %></p>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+            
+                            </div>
+                            
+                        </div>
+                        
+                            
+                            
+                    </div>
+            
+                    <p id="comment-react-count-<%= comment.id %>" class="likes-count">
+                        <!-- reaction icon if that reaction is present on post/comment -->
+                        <span id="comment-react-added-icon-<%= comment.id %>">
+                            <% if(comment.likes.length > 0){ %>
+                                <i id="comment-react-added-like-<%= comment.id %>" class="fa-solid fa-thumbs-up"></i>
+                            <% }if(comment.loves.length > 0){ %>
+                                <img id="comment-react-added-love-<%= comment.id %>" src="/images/Love.gif" alt="">
+                            <% }if(comment.hahas.length > 0){ %>
+                                <img id="comment-react-added-haha-<%= comment.id %>" src="/images/Haha.gif" alt="">
+                            <% }if(comment.wows.length > 0){ %>
+                                <img id="comment-react-added-wow-<%= comment.id %>" src="/images/Wow.gif" alt="">
+                            <% }if(comment.sads.length > 0){ %>
+                                <img id="comment-react-added-sad-<%= comment.id %>" src="/images/Sad.gif" alt="">
+                            <% }if(comment.angrys.length > 0){ %>
+                                <img id="comment-react-added-angry-<%= comment.id %>" src="/images/Angry.gif" alt="">
+                            <% } %>
+                        </span>
+                        
+                        <!-- Total reaction count -->
+                        <span id="comment-like-count-<%= comment.id %>"><%= comment.reactCount %></span>
+                        
+                    </p>
+            
+                </div>
+
+                
             </div>
         </div>
 

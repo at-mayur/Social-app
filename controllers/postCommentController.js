@@ -2,6 +2,13 @@ const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
 
+// Reaction models
+const Love = require("../models/love");
+const Haha = require("../models/haha");
+const Wow = require("../models/wow");
+const Sad = require("../models/sad");
+const Angry = require("../models/angry");
+
 const queue = require("../config/kue");
 const commentMailWorker = require("../workers/comment_email_worker");
 
@@ -127,6 +134,11 @@ module.exports.deletePostController = async function(request, response){
             // delete likes on comments
             for(let comment of comments){
                 await Like.deleteMany({target: comment.id});
+                await Love.deleteMany({target: comment.id});
+                await Haha.deleteMany({target: comment.id});
+                await Wow.deleteMany({target: comment.id});
+                await Sad.deleteMany({target: comment.id});
+                await Angry.deleteMany({target: comment.id});
             }
 
             // delete all associated comments
@@ -134,6 +146,11 @@ module.exports.deletePostController = async function(request, response){
 
             // delete all likes of post
             await Like.deleteMany({target: request.params.id});
+            await Love.deleteMany({target: request.params.id});
+            await Haha.deleteMany({target: request.params.id});
+            await Wow.deleteMany({target: request.params.id});
+            await Sad.deleteMany({target: request.params.id});
+            await Angry.deleteMany({target: request.params.id});
 
             // console.log(request.xhr);
             if(request.xhr){
@@ -176,6 +193,11 @@ module.exports.deleteCommentController = async function(request, response){
 
             // delete all likes for comment
             await Like.deleteMany({target: request.params.id});
+            await Love.deleteMany({target: request.params.id});
+            await Haha.deleteMany({target: request.params.id});
+            await Wow.deleteMany({target: request.params.id});
+            await Sad.deleteMany({target: request.params.id});
+            await Angry.deleteMany({target: request.params.id});
 
             // console.log(request.xhr);
             if(request.xhr){
@@ -215,22 +237,29 @@ module.exports.likePost = async function(request, response){
         // find if like already exists for that post from current user
         let findLike = await Like.findOne({ target: request.params.id, user: request.user.id });
 
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, post.id, "like", "post");
         // if like already present then remove that like
         if(findLike){
             // removing that like from posts like list
             await Post.findByIdAndUpdate(post.id, { $pull: {"likes": findLike.id}});
-
+        
             await findLike.remove();
-
+            post = await Post.findById(request.params.id);
             if(request.xhr){
                 return response.status(200).json({
                     msg: "Like removed..",
-                    likeAdded: false
+                    reactAdded: "like",
+                    count: await getReactCount(post),
+                    likeAdded: false,
+                    user: request.user,
+                    target: post
                 });
             }
         }
         // if like is not present then add one
         else{
+            
             let like = await Like.create({
                 user: request.user._id,
                 target: post._id,
@@ -244,7 +273,11 @@ module.exports.likePost = async function(request, response){
             if(request.xhr){
                 return response.status(200).json({
                     msg: "Like added..",
-                    likeAdded: true
+                    reactAdded: "like",
+                    count: await getReactCount(post),
+                    likeAdded: true,
+                    user: request.user,
+                    target: post
                 });
             }
 
@@ -275,17 +308,25 @@ module.exports.likeComment = async function(request, response){
         // find if like already exists for that comment from current user
         let findLike = await Like.findOne({ target: request.params.id, user: request.user.id });
 
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, comment.id, "like", "comment");
+
         // if like already present then remove that like
         if(findLike){
             // removing that like from comments like list
-            await Comment.findByIdAndUpdate(comment.id, { $pull: {"likes": findLike.id}});
+            comment = await Comment.findByIdAndUpdate(comment.id, { $pull: {"likes": findLike.id}});
 
             await findLike.remove();
+            comment = await Comment.findById(request.params.id);
 
             if(request.xhr){
                 return response.status(200).json({
                     msg: "Like removed..",
-                    likeAdded: false
+                    reactAdded: "like",
+                    count: await getReactCount(comment),
+                    likeAdded: false,
+                    user: request.user,
+                    target: comment
                 });
             }
         }
@@ -304,7 +345,11 @@ module.exports.likeComment = async function(request, response){
             if(request.xhr){
                 return response.status(200).json({
                     msg: "Like added..",
-                    likeAdded: true
+                    reactAdded: "like",
+                    count: await getReactCount(comment),
+                    likeAdded: true,
+                    user: request.user,
+                    target: comment
                 });
             }
 
@@ -322,3 +367,827 @@ module.exports.likeComment = async function(request, response){
     }
 
 };
+
+
+async function getReactCount(target){
+    await target.populate("likes loves hahas wows sads angrys");
+    let count = target.likes.length + target.loves.length + target.hahas.length
+    + target.wows.length + target.sads.length + target.angrys.length;
+    return count;
+}
+
+
+// Functions to get reaction on post or comment
+async function removePrevReaction(request, targetId, reactName, targetName){
+
+    try {
+        
+        // Get reaction from DB
+        let likeFound = await Like.findOne({ user: request.user.id, target: targetId });
+        let loveFound = await Love.findOne({ user: request.user.id, target: targetId });
+        let hahaFound = await Haha.findOne({ user: request.user.id, target: targetId });
+        let wowFound = await Wow.findOne({ user: request.user.id, target: targetId });
+        let sadFound = await Sad.findOne({ user: request.user.id, target: targetId });
+        let angryFound = await Angry.findOne({ user: request.user.id, target: targetId });
+
+        // if any of reaction exists then update reaction value
+        if(likeFound && reactName!="like"){
+            if(targetName=="post"){
+                await Post.findByIdAndUpdate(targetId, { $pull: {"likes": likeFound.id}});
+            }
+            else if(targetName=="comment"){
+                await Comment.findByIdAndUpdate(targetId, { $pull: {"likes": likeFound.id}});
+            }
+            await likeFound.remove();
+        }
+        if(loveFound && reactName!="love"){
+            if(targetName=="post"){
+                await Post.findByIdAndUpdate(targetId, { $pull: {"loves": loveFound.id}});
+            }
+            else if(targetName=="comment"){
+                await Comment.findByIdAndUpdate(targetId, { $pull: {"loves": loveFound.id}});
+            }
+            await loveFound.remove();
+        }
+        if(hahaFound && reactName!="haha"){
+            if(targetName=="post"){
+                await Post.findByIdAndUpdate(targetId, { $pull: {"hahas": hahaFound.id}});
+            }
+            else if(targetName=="comment"){
+                await Comment.findByIdAndUpdate(targetId, { $pull: {"hahas": hahaFound.id}});
+            }
+            await hahaFound.remove();
+        }
+        if(wowFound && reactName!="wow"){
+            if(targetName=="post"){
+                await Post.findByIdAndUpdate(targetId, { $pull: {"wows": wowFound.id}});
+            }
+            else if(targetName=="comment"){
+                await Comment.findByIdAndUpdate(targetId, { $pull: {"wows": wowFound.id}});
+            }
+            await wowFound.remove();
+        }
+        if(sadFound && reactName!="sad"){
+            if(targetName=="post"){
+                await Post.findByIdAndUpdate(targetId, { $pull: {"sads": sadFound.id}});
+            }
+            else if(targetName=="comment"){
+                await Comment.findByIdAndUpdate(targetId, { $pull: {"sads": sadFound.id}});
+            }
+            await sadFound.remove();
+        }
+        if(angryFound && reactName!="angry"){
+            if(targetName=="post"){
+                await Post.findByIdAndUpdate(targetId, { $pull: {"angrys": angryFound.id}});
+            }
+            else if(targetName=="comment"){
+                await Comment.findByIdAndUpdate(targetId, { $pull: {"angrys": angryFound.id}});
+            }
+            await angryFound.remove();
+        }
+
+
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+
+// Reactions on post
+// Love reaction on post
+module.exports.loveReactPost = async function(request, response){
+
+    try {
+        
+        // fetch the post
+        let post = await Post.findById(request.params.id);
+
+        // find if reaction already exists for that post from current user
+        let findLove = await Love.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, post.id, "love", "post");
+
+        // if love already present then remove that like
+        if(findLove){
+            // removing that love from posts like list
+            await Post.findByIdAndUpdate(post.id, { $pull: {"loves": findLove.id}});
+
+            await findLove.remove();
+
+            post = await Post.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Love removed..",
+                    reactAdded: "love",
+                    count: await getReactCount(post),
+                    loveAdded: false,
+                    user: request.user,
+                    target: post
+                });
+            }
+        }
+        // if love is not present then add one
+        else{
+            let love = await Love.create({
+                user: request.user._id,
+                target: post._id,
+                onModel: "Post"
+            });
+
+            post.loves.push(love);
+
+            await post.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Love added..",
+                    reactAdded: "love",
+                    count: await getReactCount(post),
+                    loveAdded: true,
+                    user: request.user,
+                    target: post
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Haha reaction on post
+module.exports.hahaReactPost = async function(request, response){
+
+    try {
+        
+        // fetch the post
+        let post = await Post.findById(request.params.id);
+
+        // find if reaction already exists for that post from current user
+        let findHaha = await Haha.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, post.id, "haha", "post");
+
+        // if haha already present then remove that like
+        if(findHaha){
+            // removing that haha from posts like list
+            await Post.findByIdAndUpdate(post.id, { $pull: {"hahas": findHaha.id}});
+
+            await findHaha.remove();
+
+            post = await Post.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Haha removed..",
+                    reactAdded: "haha",
+                    count: await getReactCount(post),
+                    hahaAdded: false,
+                    user: request.user,
+                    target: post
+                });
+            }
+        }
+        // if haha is not present then add one
+        else{
+            let haha = await Haha.create({
+                user: request.user._id,
+                target: post._id,
+                onModel: "Post"
+            });
+
+            post.hahas.push(haha);
+
+            await post.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Haha added..",
+                    reactAdded: "haha",
+                    count: await getReactCount(post),
+                    hahaAdded: true,
+                    user: request.user,
+                    target: post
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Wow reaction on post
+module.exports.wowReactPost = async function(request, response){
+
+    try {
+        
+        // fetch the post
+        let post = await Post.findById(request.params.id);
+
+        // find if reaction already exists for that post from current user
+        let findWow = await Wow.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, post.id, "wow", "post");
+
+        // if wow already present then remove that like
+        if(findWow){
+            // removing that wow from posts like list
+            await Post.findByIdAndUpdate(post.id, { $pull: {"wows": findWow.id}});
+
+            await findWow.remove();
+
+            post = await Post.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Wow removed..",
+                    reactAdded: "wow",
+                    count: await getReactCount(post),
+                    wowAdded: false,
+                    user: request.user,
+                    target: post
+                });
+            }
+        }
+        // if wow is not present then add one
+        else{
+            let wow = await Wow.create({
+                user: request.user._id,
+                target: post._id,
+                onModel: "Post"
+            });
+
+            post.wows.push(wow);
+
+            await post.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Wow added..",
+                    reactAdded: "wow",
+                    count: await getReactCount(post),
+                    wowAdded: true,
+                    user: request.user,
+                    target: post
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Sad reaction on post
+module.exports.sadReactPost = async function(request, response){
+
+    try {
+        
+        // fetch the post
+        let post = await Post.findById(request.params.id);
+
+        // find if reaction already exists for that post from current user
+        let findSad = await Sad.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, post.id, "sad", "post");
+
+        // if sad already present then remove that like
+        if(findSad){
+            // removing that sad from posts like list
+            await Post.findByIdAndUpdate(post.id, { $pull: {"sads": findSad.id}});
+
+            await findSad.remove();
+
+            post = await Post.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Sad removed..",
+                    reactAdded: "sad",
+                    count: await getReactCount(post),
+                    sadAdded: false,
+                    user: request.user,
+                    target: post
+                });
+            }
+        }
+        // if sad is not present then add one
+        else{
+            let sad = await Sad.create({
+                user: request.user._id,
+                target: post._id,
+                onModel: "Post"
+            });
+
+            post.sads.push(sad);
+
+            await post.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Sad added..",
+                    reactAdded: "sad",
+                    count: await getReactCount(post),
+                    sadAdded: true,
+                    user: request.user,
+                    target: post
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Angry reaction on post
+module.exports.angryReactPost = async function(request, response){
+
+    try {
+        
+        // fetch the post
+        let post = await Post.findById(request.params.id);
+
+        // find if reaction already exists for that post from current user
+        let findAngry = await Angry.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, post.id, "angry", "post");
+
+        // if angry already present then remove that like
+        if(findAngry){
+            // removing that angry from posts like list
+            await Post.findByIdAndUpdate(post.id, { $pull: {"angrys": findAngry.id}});
+
+            await findAngry.remove();
+
+            post = await Post.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Angry removed..",
+                    reactAdded: "angry",
+                    count: await getReactCount(post),
+                    angryAdded: false,
+                    user: request.user,
+                    target: post
+                });
+            }
+        }
+        // if angry is not present then add one
+        else{
+            let angry = await Angry.create({
+                user: request.user._id,
+                target: post._id,
+                onModel: "Post"
+            });
+
+            post.angrys.push(angry);
+
+            await post.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Angry added..",
+                    reactAdded: "angry",
+                    count: await getReactCount(post),
+                    angryAdded: true,
+                    user: request.user,
+                    target: post
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+
+
+
+
+// Reactions on comment
+// Love reaction on comment
+module.exports.loveReactComment = async function(request, response){
+
+    try {
+        
+        // fetch the comment
+        let comment = await Comment.findById(request.params.id);
+
+        // find if reaction already exists for that comment from current user
+        let findLove = await Love.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, comment.id, "love", "comment");
+
+        // if love already present then remove that like
+        if(findLove){
+            // removing that love from comment loves list
+            await Comment.findByIdAndUpdate(comment.id, { $pull: {"loves": findLove.id}});
+
+            await findLove.remove();
+
+            comment = await Comment.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Love removed..",
+                    reactAdded: "love",
+                    count: await getReactCount(comment),
+                    loveAdded: false,
+                    user: request.user,
+                    target: comment
+                });
+            }
+        }
+        // if love is not present then add one
+        else{
+            let love = await Love.create({
+                user: request.user._id,
+                target: comment._id,
+                onModel: "Comment"
+            });
+
+            comment.loves.push(love);
+
+            await comment.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Love added..",
+                    reactAdded: "love",
+                    count: await getReactCount(comment),
+                    loveAdded: true,
+                    user: request.user,
+                    target: comment
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Haha reaction on comment
+module.exports.hahaReactComment = async function(request, response){
+
+    try {
+        
+        // fetch the comment
+        let comment = await Comment.findById(request.params.id);
+
+        // find if reaction already exists for that comment from current user
+        let findHaha = await Haha.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, comment.id, "haha", "comment");
+
+        // if haha already present then remove that like
+        if(findHaha){
+            // removing that haha from comment hahas list
+            await Comment.findByIdAndUpdate(comment.id, { $pull: {"hahas": findHaha.id}});
+
+            await findHaha.remove();
+
+            comment = await Comment.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Haha removed..",
+                    reactAdded: "haha",
+                    count: await getReactCount(comment),
+                    hahaAdded: false,
+                    user: request.user,
+                    target: comment
+                });
+            }
+        }
+        // if haha is not present then add one
+        else{
+            let haha = await Haha.create({
+                user: request.user._id,
+                target: comment._id,
+                onModel: "Comment"
+            });
+
+            comment.hahas.push(haha);
+
+            await comment.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Haha added..",
+                    reactAdded: "haha",
+                    count: await getReactCount(comment),
+                    hahaAdded: true,
+                    user: request.user,
+                    target: comment
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Wow reaction on comment
+module.exports.wowReactComment = async function(request, response){
+
+    try {
+        
+        // fetch the comment
+        let comment = await Comment.findById(request.params.id);
+
+        // find if reaction already exists for that comment from current user
+        let findWow = await Wow.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, comment.id, "wow", "comment");
+
+        // if wow already present then remove that like
+        if(findWow){
+            // removing that wow from comments like list
+            await Comment.findByIdAndUpdate(comment.id, { $pull: {"wows": findWow.id}});
+
+            await findWow.remove();
+
+            comment = await Comment.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Wow removed..",
+                    reactAdded: "wow",
+                    count: await getReactCount(comment),
+                    wowAdded: false,
+                    user: request.user,
+                    target: comment
+                });
+            }
+        }
+        // if wow is not present then add one
+        else{
+            let wow = await Wow.create({
+                user: request.user._id,
+                target: comment._id,
+                onModel: "Comment"
+            });
+
+            comment.wows.push(wow);
+
+            await comment.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Wow added..",
+                    reactAdded: "wow",
+                    count: await getReactCount(comment),
+                    wowAdded: true,
+                    user: request.user,
+                    target: comment
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Sad reaction on comment
+module.exports.sadReactComment = async function(request, response){
+
+    try {
+        
+        // fetch the comment
+        let comment = await Comment.findById(request.params.id);
+
+        // find if reaction already exists for that comment from current user
+        let findSad = await Sad.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, comment.id, "sad", "comment");
+
+        // if sad already present then remove that like
+        if(findSad){
+            // removing that sad from comments like list
+            await Comment.findByIdAndUpdate(comment.id, { $pull: {"sads": findSad.id}});
+
+            await findSad.remove();
+
+            comment = await Comment.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Sad removed..",
+                    reactAdded: "sad",
+                    count: await getReactCount(comment),
+                    sadAdded: false,
+                    user: request.user,
+                    target: comment
+                });
+            }
+        }
+        // if sad is not present then add one
+        else{
+            let sad = await Sad.create({
+                user: request.user._id,
+                target: comment._id,
+                onModel: "Comment"
+            });
+
+            comment.sads.push(sad);
+
+            await comment.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Sad added..",
+                    reactAdded: "sad",
+                    count: await getReactCount(comment),
+                    sadAdded: true,
+                    user: request.user,
+                    target: comment
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+
+// Angry reaction on comment
+module.exports.angryReactComment = async function(request, response){
+
+    try {
+        
+        // fetch the comment
+        let comment = await Comment.findById(request.params.id);
+
+        // find if reaction already exists for that comment from current user
+        let findAngry = await Angry.findOne({ target: request.params.id, user: request.user.id });
+
+        // Remove any other previous reaction if present
+        await removePrevReaction(request, comment.id, "angry", "comment");
+
+        // if angry already present then remove that like
+        if(findAngry){
+            // removing that angry from comments like list
+            await Comment.findByIdAndUpdate(comment.id, { $pull: {"angrys": findAngry.id}});
+
+            await findAngry.remove();
+
+            comment = await Comment.findById(request.params.id);
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Angry removed..",
+                    reactAdded: "angry",
+                    count: await getReactCount(comment),
+                    angryAdded: false,
+                    user: request.user,
+                    target: comment
+                });
+            }
+        }
+        // if angry is not present then add one
+        else{
+            let angry = await Angry.create({
+                user: request.user._id,
+                target: comment._id,
+                onModel: "Comment"
+            });
+
+            comment.angrys.push(angry);
+
+            await comment.save();
+
+            if(request.xhr){
+                return response.status(200).json({
+                    msg: "Angry added..",
+                    reactAdded: "angry",
+                    count: await getReactCount(comment),
+                    angryAdded: true,
+                    user: request.user,
+                    target: comment
+                });
+            }
+
+        }
+
+        return response.redirect("back");
+
+    } catch (error) {
+        if(request.xhr){
+            return response.status(500).json({
+                message: error
+            });
+        }
+        request.flash('error', error);
+        console.log(`Error adding like to post..\n${error}`);
+    }
+
+};
+

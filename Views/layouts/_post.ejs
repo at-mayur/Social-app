@@ -7,14 +7,281 @@
 
         <!-- Post likes -->
         <div class="like-div">
-            <% if(post.like){ %>
-                <a id="post-like-<%= post.id %>" href="/post/post-like/<%= post.id %>"><i class="fa-solid fa-thumbs-up"></i></a>
-            <% }else{ %>
-                <a id="post-like-<%= post.id %>" href="/post/post-like/<%= post.id %>"><i class="fa-regular fa-thumbs-up"></i></a>
-            <% } %>
+
+            <!-- Reaction container -->
+            <div class="container">
+                <div class="content">
+                    <!-- Container holding all reactions -->
+                    <div id="emoji-container-post-<%= post.id %>" class="emoji-container">
+                        <!-- Divs holding individual reaction -->
+                        <div class="emoji">
+                            <a id="post-like-<%= post.id %>" href="/post/post-like/<%= post.id %>">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                            </a>
+                            <p>Like</p>
+                        </div>
+                        <div class="emoji">
+                            <a id="post-love-<%= post.id %>" href="/post/post-love/<%= post.id %>">
+                                <img src="/images/Love.gif" alt="">
+                            </a>
+                            <p>Love</p>
+                        </div>
+                        <div class="emoji">
+                            <a id="post-haha-<%= post.id %>" href="/post/post-haha/<%= post.id %>">
+                                <img src="/images/Haha.gif" alt="">
+                            </a>
+                            <p>Haha</p>
+                        </div>
+                        <div class="emoji extra">
+                            <a id="post-wow-<%= post.id %>" href="/post/post-wow/<%= post.id %>">
+                                <img src="/images/Wow.gif" alt="">
+                            </a>
+                            <p>Wow</p>
+                        </div>
+                        <div class="emoji extra">
+                            <a id="post-sad-<%= post.id %>" href="/post/post-sad/<%= post.id %>">
+                                <img src="/images/Sad.gif" alt="">
+                            </a>
+                            <p>Sad</p>
+                        </div>
+                        <div class="emoji">
+                            <a id="post-angry-<%= post.id %>" href="/post/post-angry/<%= post.id %>">
+                                <img src="/images/Angry.gif" alt="">
+                            </a>
+                            <p>Angry</p>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Like button -->
+                <% if(post.reaction && post.reaction=="like"){ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-like/<%= post.id %>"><i class="fa-solid fa-thumbs-up"></i></a>
+                <% }else if(post.reaction && post.reaction=="love"){ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-love/<%= post.id %>"><img src="/images/Love.gif" alt=""></a>
+                <% }else if(post.reaction && post.reaction=="haha"){ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-haha/<%= post.id %>"><img src="/images/Haha.gif" alt=""></a>
+                <% }else if(post.reaction && post.reaction=="wow"){ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-wow/<%= post.id %>"><img src="/images/Wow.gif" alt=""></a>
+                <% }else if(post.reaction && post.reaction=="sad"){ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-sad/<%= post.id %>"><img src="/images/Sad.gif" alt=""></a>
+                <% }else if(post.reaction && post.reaction=="angry"){ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-angry/<%= post.id %>"><img src="/images/Angry.gif" alt=""></a>
+                <% }else{ %>
+                    <a class="post-like-btn" id="post-react-<%= post.id %>" href="/post/post-like/<%= post.id %>"><i class="fa-regular fa-thumbs-up"></i></a>
+                <% } %>
+        
+            </div>
 
             <!-- Likes count -->
-            <span id="post-like-count-<%= post.id %>"><%= post.likes.length %></span>
+            <div class="reaction-count-display">
+
+                <!-- Container which will display on mouse over count -->
+                <div id="reactions-container-post-<%= post.id %>" class="reactions-container">
+                    <div class="react-content">
+                        <!-- Container holding icons for the reactions present on the post/comment -->
+                        <div class="react-added" id="post-react-added-<%= post.id %>">
+
+                            <!-- If reaction is present then only add button -->
+                            <% if(post.likes.length > 0){ %>
+                                <button type="button" id="post-like-list-btn-<%= post.id %>">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                </button>
+                            <% } %>
+                            
+                            <% if(post.loves.length > 0){ %>
+                                <button type="button" id="post-love-list-btn-<%= post.id %>">
+                                    <img src="/images/Love.gif" alt="">
+                                </button>
+                            <% } %>
+                            
+                            <% if(post.hahas.length > 0){ %>
+                                <button type="button" id="post-haha-list-btn-<%= post.id %>">
+                                    <img src="/images/Haha.gif" alt="">
+                                </button>
+                            <% } %>
+                            
+                            <% if(post.wows.length > 0){ %>
+                                <button type="button" id="post-wow-list-btn-<%= post.id %>">
+                                    <img src="/images/Wow.gif" alt="">
+                                </button>
+                            <% } %>
+                            
+                            <% if(post.sads.length > 0){ %>
+                                <button type="button" id="post-sad-list-btn-<%= post.id %>">
+                                    <img src="/images/Sad.gif" alt="">
+                                </button>
+                            <% } %>
+                            
+                            <% if(post.angrys.length > 0){ %>
+                                <button type="button" id="post-angry-list-btn-<%= post.id %>">
+                                    <img src="/images/Angry.gif" alt="">
+                                </button>
+                            <% } %>
+                            
+                        </div>
+
+                        <!-- Container holding lists of users who reacted for all reactions -->
+                        <div class="react-lists-container" id="post-react-list-<%= post.id %>">
+        
+                            <!-- If reaction is present then only add list -->
+                            <% if(post.likes.length > 0){ %>
+                                <div id="post-react-list-like-<%= post.id %>" class="react-list">
+                                    <!-- Reaction name -->
+                                    <h5>Like</h5>
+
+                                    <!-- Users list who had given this reaction -->
+                                    <ul id="post-like-list-<%= post._id %>">
+                                        <% for(let like of post.likes){ %>
+                                            <li id="post-like-user-<%= like.user._id %>">
+                                                <% if(like.user.profile){ %>
+                                                    <img src="<%= like.user.profile %>" alt="<%= like.user.username %>" srcset="">
+                                                <% }else{ %>
+                                                    <!-- if profile image is not available then display this default image -->
+                                                    <img src="/upload/profile/defaultDP.svg" alt="<%= like.user.username %>" srcset="">
+                                                <% } %>
+                                                <p><%= like.user.username %></p>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            
+        
+                            <% if(post.loves.length > 0){ %>
+                                <div id="post-react-list-love-<%= post.id %>" class="react-list">
+                                    <h5>Love</h5>
+                                    <ul id="post-love-list-<%= post._id %>">
+                                        <% for(let love of post.loves){ %>
+                                            <li id="post-love-user-<%= love.user._id %>">
+                                                <% if(love.user.profile){ %>
+                                                    <img src="<%= love.user.profile %>" alt="<%= love.user.username %>" srcset="">
+                                                <% }else{ %>
+                                                    <!-- if profile image is not available then display this default image -->
+                                                    <img src="/upload/profile/defaultDP.svg" alt="<%= love.user.username %>" srcset="">
+                                                <% } %>
+                                                <p><%= love.user.username %></p>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            
+        
+                            <% if(post.hahas.length > 0){ %>
+                                <div id="post-react-list-haha-<%= post.id %>" class="react-list">
+                                    <h5>Haha</h5>
+                                    <ul id="post-haha-list-<%= post._id %>">
+                                        <% for(let haha of post.hahas){ %>
+                                            <li id="post-haha-user-<%= haha.user._id %>">
+                                                <% if(haha.user.profile){ %>
+                                                    <img src="<%= haha.user.profile %>" alt="<%= haha.user.username %>" srcset="">
+                                                <% }else{ %>
+                                                    <!-- if profile image is not available then display this default image -->
+                                                    <img src="/upload/profile/defaultDP.svg" alt="<%= haha.user.username %>" srcset="">
+                                                <% } %>
+                                                <p><%= haha.user.username %></p>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            
+
+                            <% if(post.wows.length > 0){ %>
+                                <div id="post-react-list-wow-<%= post.id %>" class="react-list">
+                                    <h5>Wow</h5>
+                                    <ul id="post-wow-list-<%= post._id %>">
+                                        <% for(let wow of post.wows){ %>
+                                            <li id="post-wow-user-<%= wow.user._id %>">
+                                                <% if(wow.user.profile){ %>
+                                                    <img src="<%= wow.user.profile %>" alt="<%= wow.user.username %>" srcset="">
+                                                <% }else{ %>
+                                                    <!-- if profile image is not available then display this default image -->
+                                                    <img src="/upload/profile/defaultDP.svg" alt="<%= wow.user.username %>" srcset="">
+                                                <% } %>
+                                                <p><%= wow.user.username %></p>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            
+
+                            <% if(post.sads.length > 0){ %>
+                                <div id="post-react-list-sad-<%= post.id %>" class="react-list">
+                                    <h5>Sad</h5>
+                                    <ul id="post-sad-list-<%= post._id %>">
+                                        <% for(let sad of post.sads){ %>
+                                            <li id="post-sad-user-<%= sad.user._id %>">
+                                                <% if(sad.user.profile){ %>
+                                                    <img src="<%= sad.user.profile %>" alt="<%= sad.user.username %>" srcset="">
+                                                <% }else{ %>
+                                                    <!-- if profile image is not available then display this default image -->
+                                                    <img src="/upload/profile/defaultDP.svg" alt="<%= sad.user.username %>" srcset="">
+                                                <% } %>
+                                                <p><%= sad.user.username %></p>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            
+
+                            <% if(post.angrys.length > 0){ %>
+                                <div id="post-react-list-angry-<%= post.id %>" class="react-list">
+                                    <h5>Angry</h5>
+                                    <ul id="post-angry-list-<%= post._id %>">
+                                        <% for(let angry of post.angrys){ %>
+                                            <li id="post-angry-user-<%= angry.user._id %>">
+                                                <% if(angry.user.profile){ %>
+                                                    <img src="<%= angry.user.profile %>" alt="<%= angry.user.username %>" srcset="">
+                                                <% }else{ %>
+                                                    <!-- if profile image is not available then display this default image -->
+                                                    <img src="/upload/profile/defaultDP.svg" alt="<%= angry.user.username %>" srcset="">
+                                                <% } %>
+                                                <p><%= angry.user.username %></p>
+                                            </li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            
+        
+                        </div>
+                        
+                    </div>
+                    
+                        
+                        
+                </div>
+        
+                <!-- Para displaying added reactions icon and count of total reactions -->
+                <p id="post-react-count-<%= post.id %>" class="likes-count">
+                    <!-- reaction icon if that reaction is present on post/comment -->
+                    <span id="post-react-added-icon-<%= post.id %>">
+                        <% if(post.likes.length > 0){ %>
+                            <i id="post-react-added-like-<%= post.id %>" class="fa-solid fa-thumbs-up"></i>
+                        <% }if(post.loves.length > 0){ %>
+                            <img id="post-react-added-love-<%= post.id %>" src="/images/Love.gif" alt="">
+                        <% }if(post.hahas.length > 0){ %>
+                            <img id="post-react-added-haha-<%= post.id %>" src="/images/Haha.gif" alt="">
+                        <% }if(post.wows.length > 0){ %>
+                            <img id="post-react-added-wow-<%= post.id %>" src="/images/Wow.gif" alt="">
+                        <% }if(post.sads.length > 0){ %>
+                            <img id="post-react-added-sad-<%= post.id %>" src="/images/Sad.gif" alt="">
+                        <% }if(post.angrys.length > 0){ %>
+                            <img id="post-react-added-angry-<%= post.id %>" src="/images/Angry.gif" alt="">
+                        <% } %>
+                    </span>
+            
+                    <!-- Total reaction count -->
+                    <span id="post-like-count-<%= post.id %>"><%= post.reactCount %></span>
+                    
+                </p>
+        
+            </div>
+            
+            
         </div>
     </div>
     <div class="post-comment">
