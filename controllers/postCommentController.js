@@ -9,6 +9,9 @@ const Wow = require("../models/wow");
 const Sad = require("../models/sad");
 const Angry = require("../models/angry");
 
+const path = require("path");
+const fs = require("fs");
+
 const queue = require("../config/kue");
 const commentMailWorker = require("../workers/comment_email_worker");
 
@@ -22,6 +25,13 @@ module.exports.createPostController = async function(request, response){
             postContent: request.body.postContent,
             user: request.user._id
         });
+
+        // If request contains file uploaded with it. Save it to destination.
+        if(request.file){
+            post.postImage = Post.postImagePath + request.file.filename;
+        }
+
+        post.save();
 
         // populate user field for post
         await post.populate("user", "username email");
@@ -38,13 +48,14 @@ module.exports.createPostController = async function(request, response){
 
 
     } catch (error) {
+        console.log(`Error adding post to DB..\n${error}`);
         if(request.xhr){
             return response.status(500).json({
                 message: error
             });
         }
         request.flash('error', error);
-        console.log(`Error adding post to DB..\n${error}`);
+        
     }
     
 };
@@ -126,6 +137,14 @@ module.exports.deletePostController = async function(request, response){
 
         // check if current authenticated user and post creator is same
         if(request.user && request.user.id==post.user){
+
+            // Remove image uploaded with post.
+            if(post.postImage){
+                if(fs.existsSync(path.join(__dirname, "..", post.postImage))){
+                    fs.unlinkSync(path.join(__dirname, "..", post.postImage));
+                }
+            }
+
             await post.remove();
 
             // fetch all associated comments

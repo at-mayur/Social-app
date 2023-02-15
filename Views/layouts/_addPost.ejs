@@ -1,19 +1,24 @@
 
 <!-- Form for adding a new post -->
 <div id="add-post">
-    <h2 class="head">Post..</h2>
+    <h3 class="head">Post..</h3>
 
     <!-- Display new post form if user is logged in -->
     <% if(locals.user){ %>
-    <form action="/post/create-post" id="add-post-form" method="post">
-        <textarea name="postContent" cols="30" rows="2"></textarea>
+        <!-- enctype multipart/data to upload image with form -->
+    <form action="/post/create-post" id="add-post-form" enctype="multipart/form-data" method="post">
+        <textarea name="postContent" cols="30" rows="1"></textarea>
+        <label for="post-image">
+            Add Photo
+        </label>
+        <input type="file" id="post-image" name="post_img" >
         <button type="submit">Post</button>
     </form>
 
     <!-- Display new post form as disabled if user is not logged in -->
     <% }else{ %>
     <form action="/post/create-post" method="post">
-        <textarea name="post-content" cols="30" rows="10" disabled></textarea>
+        <textarea name="post-content" cols="30" rows="1" disabled></textarea>
         <button type="submit" disabled>Post</button>
     </form>
     <% } %>
@@ -22,7 +27,7 @@
 
 <!-- Current logged users's friend list -->
 <div class="friend-list">
-    <h2 class="head">Friends</h2>
+    <h3 class="head">Friends</h3>
     <!-- Display friend list only if user is logged in -->
     <% if(locals.user){ %>
         <ul>

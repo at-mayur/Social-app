@@ -92,13 +92,22 @@
 }
 
 .post-content{
-    width: 65%;
+    width: 100%;
+}
+
+/* Styling image uploaded with post */
+.post-img{
+    display: block;
+    width: 90%;
+    margin: auto;
+    border-radius: 20px;
 }
 
 /* Div holding likes and count */
 .like-div{
     height: 50px;
     margin-left: 1rem;
+    margin-bottom: 1rem;
     display: flex;
     align-items: flex-end;    
 }
@@ -122,7 +131,8 @@
 
 /* add comment form holding division */
 .post-comment{
-    width: 30%;
+    width: 100%;
+    padding-left: 2rem;
 }
 
 /* Post delete button at last */
@@ -240,9 +250,21 @@
     padding: 0.3rem 0.5rem;
 }
 
+#add-post form label{
+    color: navy;
+}
+
+#add-post input[type="file"]{
+    margin-bottom: 1rem;
+}
+
+#add-post h3{
+    margin: 0.3rem 0;
+}
+
 /* Setting height for add post form section */
 #add-post{
-    height: 30%;
+    height: 35%;
     box-sizing: border-box;
 }
 
@@ -250,18 +272,17 @@
 /* Styles for friends list. This styles apply for past chats list section from chat section */
 .friend-list{
     height: 65%;
-    margin-top: 0.7rem;
     box-sizing: border-box;
     padding-top: 0.7rem;
 }
 
-.friend-list h2{
-    margin-top: 0;
+.friend-list h3{
+    margin: 0.3rem 0;
 }
 
 /* Setting fixed height for list and setting overflow scroll */
 .friend-list ul{
-    height: 80%;
+    height: 85%;
     margin-top: 0;
     margin-bottom: 0;
     list-style: none;
@@ -729,21 +750,10 @@ Hence this chat box is invisible initially */
         margin-bottom: 2%;
     }
 
-    .post-content{
-        width: 100%;
-    }
-
-    .post-comment{
-        width: 100%;
-    }
-
     #chat-section{
         width: 100%;
         margin-top: 1rem;
     }
 
-    .like-div{
-        margin-bottom: 1rem;
-    }
 
 }

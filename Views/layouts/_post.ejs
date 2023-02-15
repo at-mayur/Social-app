@@ -3,7 +3,14 @@
 <h5><%= post.user.username %></h5>
 <div class="post-body">
     <div class="post-content">
-        <p><%= post.postContent %></p>
+        <div>
+            <p><%= post.postContent %></p>
+
+            <!-- Display image uploaded with post if exists -->
+            <% if(post.postImage){ %>
+                <img class="post-img" src="<%= post.postImage %>" alt="Image not available">
+            <% } %>
+        </div>
 
         <!-- Post likes -->
         <div class="like-div">

@@ -1,12 +1,14 @@
 const postController = require("../controllers/postCommentController");
 const express = require("express");
 const passport = require("passport");
+const Post = require("../models/post");
 
 // Router for post, comments related requests
 const router = express.Router();
 
 // Routes for creating post, comment
-router.post("/create-post", passport.checkAuthentication, postController.createPostController);
+// Add middle ware to fetch image uploaded with request
+router.post("/create-post", passport.checkAuthentication, Post.uploadImage, postController.createPostController);
 router.post("/create-comment", passport.checkAuthentication, postController.createCommentController);
 
 // Routes for deleting a post or a comment

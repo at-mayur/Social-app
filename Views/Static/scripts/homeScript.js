@@ -812,12 +812,17 @@
             // Prevent default action
             event.preventDefault();
         
+            // Fetching form data. serialize() method does not return image uploaded with form.
+            // Hence fetching form data using new FormData()
+            let data = new FormData(addPostForm[0]);
             // Send new ajax request
             $.ajax({
                 type: "post",
                 url: "/post/create-post",
+                processData: false,
+                contentType: false,
                 // serialize() fetch all field values like request.body
-                data: addPostForm.serialize(),
+                data: data,
                 success: function(data){
                     // create new li element for new post
                     let newPost = postItem(data.post);
@@ -1029,6 +1034,12 @@
     function postItem(post){
         // console.log(post);
 
+        let postImg = "";
+
+        if(post.postImage){
+            postImg = `<img class="post-img" src="${ post.postImage }" alt="Image not available">`;
+        }
+
         return $(`
 
         <li id="post-${ post._id }">
@@ -1036,7 +1047,13 @@
             <h5>${ post.user.username }</h5>
             <div class="post-body">
                 <div class="post-content">
-                    <p>${ post.postContent }</p>
+                    
+                    <div>
+                        <p>${ post.postContent }</p>
+
+                        ${ postImg }
+
+                    </div>
 
 
                     <div class="like-div">
