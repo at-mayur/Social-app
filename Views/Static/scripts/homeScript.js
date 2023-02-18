@@ -197,32 +197,32 @@
                     // if like added then increase likes count and change like icon
                     if(data.reactAdded == "like"){
 
-                        modifyReactElement(likeBtn, data.likeAdded, "post", "like", `<i class="fa-solid fa-thumbs-up"></i>`, post, `post-like-count-${post}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.likeAdded, "post", "like", data.reactionRemoved, `<i class="fa-solid fa-thumbs-up"></i>`, post, `post-like-count-${post}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "love"){
 
-                        modifyReactElement(likeBtn, data.loveAdded, "post", "love", `<img src="/images/Love.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.loveAdded, "post", "love", data.reactionRemoved, `<img src="/images/Love.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "haha"){
 
-                        modifyReactElement(likeBtn, data.hahaAdded, "post", "haha", `<img src="/images/Haha.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.hahaAdded, "post", "haha", data.reactionRemoved, `<img src="/images/Haha.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "wow"){
 
-                        modifyReactElement(likeBtn, data.wowAdded, "post", "wow", `<img src="/images/Wow.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.wowAdded, "post", "wow", data.reactionRemoved, `<img src="/images/Wow.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "sad"){
 
-                        modifyReactElement(likeBtn, data.sadAdded, "post", "sad", `<img src="/images/Sad.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.sadAdded, "post", "sad", data.reactionRemoved, `<img src="/images/Sad.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
 
                     }
                     else{
 
-                        modifyReactElement(likeBtn, data.angryAdded, "post", "angry", `<img src="/images/Angry.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.angryAdded, "post", "angry", data.reactionRemoved, `<img src="/images/Angry.gif" alt="">`, post, `post-like-count-${post}`, data.count, data.user, data.target);
 
                     }
 
@@ -259,32 +259,32 @@
                     // if like added then increase likes count and change like icon
                     if(data.reactAdded == "like"){
 
-                        modifyReactElement(likeBtn, data.likeAdded, "comment", "like", `<i class="fa-solid fa-thumbs-up"></i>`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.likeAdded, "comment", "like", data.reactionRemoved, `<i class="fa-solid fa-thumbs-up"></i>`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "love"){
 
-                        modifyReactElement(likeBtn, data.loveAdded, "comment", "love", `<img src="/images/Love.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.loveAdded, "comment", "love", data.reactionRemoved, `<img src="/images/Love.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "haha"){
 
-                        modifyReactElement(likeBtn, data.hahaAdded, "comment", "haha", `<img src="/images/Haha.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.hahaAdded, "comment", "haha", data.reactionRemoved, `<img src="/images/Haha.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "wow"){
 
-                        modifyReactElement(likeBtn, data.wowAdded, "comment", "wow", `<img src="/images/Wow.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.wowAdded, "comment", "wow", data.reactionRemoved, `<img src="/images/Wow.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "sad"){
 
-                        modifyReactElement(likeBtn, data.sadAdded, "comment", "sad", `<img src="/images/Sad.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.sadAdded, "comment", "sad", data.reactionRemoved, `<img src="/images/Sad.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
 
                     }
                     else{
 
-                        modifyReactElement(likeBtn, data.angryAdded, "comment", "angry", `<img src="/images/Angry.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
+                        modifyReactElement(likeBtn, data.angryAdded, "comment", "angry", data.reactionRemoved, `<img src="/images/Angry.gif" alt="">`, comment, `comment-like-count-${comment}`, data.count, data.user, data.target);
 
                     }
 
@@ -303,7 +303,7 @@
 
 
     // Function modifying elements after reaction
-    let modifyReactElement = function(reactBtn, reactAdded, targetName, reactName, img, targetId, counterId, count, user, target){
+    let modifyReactElement = function(reactBtn, reactAdded, targetName, reactName, reactRemoved, img, targetId, counterId, count, user, target){
         if(reactAdded){
             // change reaction button below to given reaction and also href property
             reactBtn.prop("href", `/post/${targetName}-${reactName}/${targetId}`);
@@ -312,6 +312,9 @@
             // Update count of post/comment accordingly
             $(`#${counterId}`).text(count);
 
+
+            // if previous reaction count is becoming zero then make necessary action
+            actionOnRemovingReact(targetName, reactRemoved, targetId, target, user);
 
             let reactionAdded = $(`#${targetName}-react-added-${reactName}-${targetId}`);
             // If this reaction is not given by someone before then add new icon
@@ -584,33 +587,33 @@
                     // if like added then increase likes count and change like icon
                     if(data.reactAdded == "like"){
 
-                        modifyReactElement(reactBtn, data.likeAdded, "post", "like", `<i class="fa-solid fa-thumbs-up"></i>`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.likeAdded, "post", "like", data.reactionRemoved, `<i class="fa-solid fa-thumbs-up"></i>`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
                         
 
                     }
                     else if(data.reactAdded == "love"){
 
-                        modifyReactElement(reactBtn, data.loveAdded, "post", "love", `<img src="/images/Love.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.loveAdded, "post", "love", data.reactionRemoved, `<img src="/images/Love.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "haha"){
 
-                        modifyReactElement(reactBtn, data.hahaAdded, "post", "haha", `<img src="/images/Haha.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.hahaAdded, "post", "haha", data.reactionRemoved, `<img src="/images/Haha.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "wow"){
 
-                        modifyReactElement(reactBtn, data.wowAdded, "post", "wow", `<img src="/images/Wow.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.wowAdded, "post", "wow", data.reactionRemoved, `<img src="/images/Wow.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "sad"){
 
-                        modifyReactElement(reactBtn, data.sadAdded, "post", "sad", `<img src="/images/Sad.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.sadAdded, "post", "sad", data.reactionRemoved, `<img src="/images/Sad.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
 
                     }
                     else{
 
-                        modifyReactElement(reactBtn, data.angryAdded, "post", "angry", `<img src="/images/Angry.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.angryAdded, "post", "angry", data.reactionRemoved, `<img src="/images/Angry.gif" alt="">`, pstLikeId, `post-like-count-${pstLikeId}`, data.count, data.user, data.target);
 
                     }
 
@@ -654,33 +657,33 @@
                     // if like added then increase likes count and change like icon
                     if(data.reactAdded == "like"){
 
-                        modifyReactElement(reactBtn, data.likeAdded, "comment", "like", `<i class="fa-solid fa-thumbs-up"></i>`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.likeAdded, "comment", "like", data.reactionRemoved, `<i class="fa-solid fa-thumbs-up"></i>`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
                         
 
                     }
                     else if(data.reactAdded == "love"){
 
-                        modifyReactElement(reactBtn, data.loveAdded, "comment", "love", `<img src="/images/Love.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.loveAdded, "comment", "love", data.reactionRemoved, `<img src="/images/Love.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "haha"){
 
-                        modifyReactElement(reactBtn, data.hahaAdded, "comment", "haha", `<img src="/images/Haha.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.hahaAdded, "comment", "haha", data.reactionRemoved, `<img src="/images/Haha.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "wow"){
 
-                        modifyReactElement(reactBtn, data.wowAdded, "comment", "wow", `<img src="/images/Wow.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.wowAdded, "comment", "wow", data.reactionRemoved, `<img src="/images/Wow.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
 
                     }
                     else if(data.reactAdded == "sad"){
 
-                        modifyReactElement(reactBtn, data.sadAdded, "comment", "sad", `<img src="/images/Sad.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.sadAdded, "comment", "sad", data.reactionRemoved, `<img src="/images/Sad.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
 
                     }
                     else{
 
-                        modifyReactElement(reactBtn, data.angryAdded, "comment", "angry", `<img src="/images/Angry.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
+                        modifyReactElement(reactBtn, data.angryAdded, "comment", "angry", data.reactionRemoved, `<img src="/images/Angry.gif" alt="">`, cmtLikeId, `comment-like-count-${cmtLikeId}`, data.count, data.user, data.target);
 
                     }
 

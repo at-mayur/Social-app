@@ -257,7 +257,7 @@ module.exports.likePost = async function(request, response){
         let findLike = await Like.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, post.id, "like", "post");
+        let reactionRemoved = await removePrevReaction(request, post.id, "like", "post");
         // if like already present then remove that like
         if(findLike){
             // removing that like from posts like list
@@ -269,6 +269,7 @@ module.exports.likePost = async function(request, response){
                 return response.status(200).json({
                     msg: "Like removed..",
                     reactAdded: "like",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     likeAdded: false,
                     user: request.user,
@@ -293,6 +294,7 @@ module.exports.likePost = async function(request, response){
                 return response.status(200).json({
                     msg: "Like added..",
                     reactAdded: "like",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     likeAdded: true,
                     user: request.user,
@@ -328,7 +330,7 @@ module.exports.likeComment = async function(request, response){
         let findLike = await Like.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, comment.id, "like", "comment");
+        let reactionRemoved = await removePrevReaction(request, comment.id, "like", "comment");
 
         // if like already present then remove that like
         if(findLike){
@@ -342,6 +344,7 @@ module.exports.likeComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Like removed..",
                     reactAdded: "like",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     likeAdded: false,
                     user: request.user,
@@ -365,6 +368,7 @@ module.exports.likeComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Like added..",
                     reactAdded: "like",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     likeAdded: true,
                     user: request.user,
@@ -400,7 +404,9 @@ async function getReactCount(target){
 async function removePrevReaction(request, targetId, reactName, targetName){
 
     try {
-        
+        // declare variable to store which reaction has been removed
+        let reactionRemoved = "";
+
         // Get reaction from DB
         let likeFound = await Like.findOne({ user: request.user.id, target: targetId });
         let loveFound = await Love.findOne({ user: request.user.id, target: targetId });
@@ -418,6 +424,8 @@ async function removePrevReaction(request, targetId, reactName, targetName){
                 await Comment.findByIdAndUpdate(targetId, { $pull: {"likes": likeFound.id}});
             }
             await likeFound.remove();
+
+            reactionRemoved = "like";
         }
         if(loveFound && reactName!="love"){
             if(targetName=="post"){
@@ -427,6 +435,8 @@ async function removePrevReaction(request, targetId, reactName, targetName){
                 await Comment.findByIdAndUpdate(targetId, { $pull: {"loves": loveFound.id}});
             }
             await loveFound.remove();
+
+            reactionRemoved = "love";
         }
         if(hahaFound && reactName!="haha"){
             if(targetName=="post"){
@@ -436,6 +446,8 @@ async function removePrevReaction(request, targetId, reactName, targetName){
                 await Comment.findByIdAndUpdate(targetId, { $pull: {"hahas": hahaFound.id}});
             }
             await hahaFound.remove();
+
+            reactionRemoved = "haha";
         }
         if(wowFound && reactName!="wow"){
             if(targetName=="post"){
@@ -445,6 +457,8 @@ async function removePrevReaction(request, targetId, reactName, targetName){
                 await Comment.findByIdAndUpdate(targetId, { $pull: {"wows": wowFound.id}});
             }
             await wowFound.remove();
+
+            reactionRemoved = "wow";
         }
         if(sadFound && reactName!="sad"){
             if(targetName=="post"){
@@ -454,6 +468,8 @@ async function removePrevReaction(request, targetId, reactName, targetName){
                 await Comment.findByIdAndUpdate(targetId, { $pull: {"sads": sadFound.id}});
             }
             await sadFound.remove();
+
+            reactionRemoved = "sad";
         }
         if(angryFound && reactName!="angry"){
             if(targetName=="post"){
@@ -463,9 +479,11 @@ async function removePrevReaction(request, targetId, reactName, targetName){
                 await Comment.findByIdAndUpdate(targetId, { $pull: {"angrys": angryFound.id}});
             }
             await angryFound.remove();
+
+            reactionRemoved = "angry";
         }
 
-
+        return reactionRemoved;
 
     } catch (error) {
         console.log(error);
@@ -487,7 +505,7 @@ module.exports.loveReactPost = async function(request, response){
         let findLove = await Love.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, post.id, "love", "post");
+        let reactionRemoved = await removePrevReaction(request, post.id, "love", "post");
 
         // if love already present then remove that like
         if(findLove){
@@ -502,6 +520,7 @@ module.exports.loveReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Love removed..",
                     reactAdded: "love",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     loveAdded: false,
                     user: request.user,
@@ -525,6 +544,7 @@ module.exports.loveReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Love added..",
                     reactAdded: "love",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     loveAdded: true,
                     user: request.user,
@@ -560,7 +580,7 @@ module.exports.hahaReactPost = async function(request, response){
         let findHaha = await Haha.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, post.id, "haha", "post");
+        let reactionRemoved = await removePrevReaction(request, post.id, "haha", "post");
 
         // if haha already present then remove that like
         if(findHaha){
@@ -575,6 +595,7 @@ module.exports.hahaReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Haha removed..",
                     reactAdded: "haha",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     hahaAdded: false,
                     user: request.user,
@@ -598,6 +619,7 @@ module.exports.hahaReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Haha added..",
                     reactAdded: "haha",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     hahaAdded: true,
                     user: request.user,
@@ -633,7 +655,7 @@ module.exports.wowReactPost = async function(request, response){
         let findWow = await Wow.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, post.id, "wow", "post");
+        let reactionRemoved = await removePrevReaction(request, post.id, "wow", "post");
 
         // if wow already present then remove that like
         if(findWow){
@@ -648,6 +670,7 @@ module.exports.wowReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Wow removed..",
                     reactAdded: "wow",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     wowAdded: false,
                     user: request.user,
@@ -671,6 +694,7 @@ module.exports.wowReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Wow added..",
                     reactAdded: "wow",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     wowAdded: true,
                     user: request.user,
@@ -706,7 +730,7 @@ module.exports.sadReactPost = async function(request, response){
         let findSad = await Sad.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, post.id, "sad", "post");
+        let reactionRemoved = await removePrevReaction(request, post.id, "sad", "post");
 
         // if sad already present then remove that like
         if(findSad){
@@ -721,6 +745,7 @@ module.exports.sadReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Sad removed..",
                     reactAdded: "sad",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     sadAdded: false,
                     user: request.user,
@@ -744,6 +769,7 @@ module.exports.sadReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Sad added..",
                     reactAdded: "sad",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     sadAdded: true,
                     user: request.user,
@@ -779,7 +805,7 @@ module.exports.angryReactPost = async function(request, response){
         let findAngry = await Angry.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, post.id, "angry", "post");
+        let reactionRemoved = await removePrevReaction(request, post.id, "angry", "post");
 
         // if angry already present then remove that like
         if(findAngry){
@@ -794,6 +820,7 @@ module.exports.angryReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Angry removed..",
                     reactAdded: "angry",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     angryAdded: false,
                     user: request.user,
@@ -817,6 +844,7 @@ module.exports.angryReactPost = async function(request, response){
                 return response.status(200).json({
                     msg: "Angry added..",
                     reactAdded: "angry",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(post),
                     angryAdded: true,
                     user: request.user,
@@ -857,7 +885,7 @@ module.exports.loveReactComment = async function(request, response){
         let findLove = await Love.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, comment.id, "love", "comment");
+        let reactionRemoved = await removePrevReaction(request, comment.id, "love", "comment");
 
         // if love already present then remove that like
         if(findLove){
@@ -872,6 +900,7 @@ module.exports.loveReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Love removed..",
                     reactAdded: "love",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     loveAdded: false,
                     user: request.user,
@@ -895,6 +924,7 @@ module.exports.loveReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Love added..",
                     reactAdded: "love",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     loveAdded: true,
                     user: request.user,
@@ -930,7 +960,7 @@ module.exports.hahaReactComment = async function(request, response){
         let findHaha = await Haha.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, comment.id, "haha", "comment");
+        let reactionRemoved = await removePrevReaction(request, comment.id, "haha", "comment");
 
         // if haha already present then remove that like
         if(findHaha){
@@ -945,6 +975,7 @@ module.exports.hahaReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Haha removed..",
                     reactAdded: "haha",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     hahaAdded: false,
                     user: request.user,
@@ -968,6 +999,7 @@ module.exports.hahaReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Haha added..",
                     reactAdded: "haha",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     hahaAdded: true,
                     user: request.user,
@@ -1003,7 +1035,7 @@ module.exports.wowReactComment = async function(request, response){
         let findWow = await Wow.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, comment.id, "wow", "comment");
+        let reactionRemoved = await removePrevReaction(request, comment.id, "wow", "comment");
 
         // if wow already present then remove that like
         if(findWow){
@@ -1018,6 +1050,7 @@ module.exports.wowReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Wow removed..",
                     reactAdded: "wow",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     wowAdded: false,
                     user: request.user,
@@ -1041,6 +1074,7 @@ module.exports.wowReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Wow added..",
                     reactAdded: "wow",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     wowAdded: true,
                     user: request.user,
@@ -1076,7 +1110,7 @@ module.exports.sadReactComment = async function(request, response){
         let findSad = await Sad.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, comment.id, "sad", "comment");
+        let reactionRemoved = await removePrevReaction(request, comment.id, "sad", "comment");
 
         // if sad already present then remove that like
         if(findSad){
@@ -1091,6 +1125,7 @@ module.exports.sadReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Sad removed..",
                     reactAdded: "sad",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     sadAdded: false,
                     user: request.user,
@@ -1114,6 +1149,7 @@ module.exports.sadReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Sad added..",
                     reactAdded: "sad",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     sadAdded: true,
                     user: request.user,
@@ -1149,7 +1185,7 @@ module.exports.angryReactComment = async function(request, response){
         let findAngry = await Angry.findOne({ target: request.params.id, user: request.user.id });
 
         // Remove any other previous reaction if present
-        await removePrevReaction(request, comment.id, "angry", "comment");
+        let reactionRemoved = await removePrevReaction(request, comment.id, "angry", "comment");
 
         // if angry already present then remove that like
         if(findAngry){
@@ -1164,6 +1200,7 @@ module.exports.angryReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Angry removed..",
                     reactAdded: "angry",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     angryAdded: false,
                     user: request.user,
@@ -1187,6 +1224,7 @@ module.exports.angryReactComment = async function(request, response){
                 return response.status(200).json({
                     msg: "Angry added..",
                     reactAdded: "angry",
+                    reactionRemoved: reactionRemoved,
                     count: await getReactCount(comment),
                     angryAdded: true,
                     user: request.user,

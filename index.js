@@ -40,6 +40,12 @@ const customMware = require("./config/customMiddleWare");
 // Loading environment variables
 require("dotenv").config();
 
+// Importing logger for our app
+// It is the middleware which will create logs for our app
+const morgan = require("morgan");
+// Rotating file stream to write logs to file
+const rotatingLogStream = require("./config/rotatingFileStream");
+
 
 // Declaring our Express app
 const app = express();
@@ -120,6 +126,12 @@ app.use(passport.setAuthenticatedUser);
 app.use(flash());
 // Custom middle ware that we have created for transferring flash msgs from request to response
 app.use(customMware.flashSet);
+
+
+// Setting up logger for our app with rotating file stream
+app.use(morgan("combined", {
+    stream: rotatingLogStream
+}));
 
 
 // Making our app to refer our index route file
