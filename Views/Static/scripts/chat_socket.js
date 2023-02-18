@@ -7,7 +7,7 @@ class ClientSocket{
         this.userEmail = userEmail;
 
         // Creating a socket and connecting it to provided chat server
-        this.socket = io.connect("http://localhost:5000");
+        this.socket = io.connect("http://52.72.47.148:5000");
 
         // If user email is present then call our event handler
         if(userEmail){

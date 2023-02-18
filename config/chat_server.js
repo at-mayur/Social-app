@@ -12,7 +12,7 @@ module.exports.createChatServer = function (chatServer) {
     let io = new socketIo.Server(chatServer, {
         // Option to handle cors error on socket connection
         cors: {
-            origin: "http://localhost:8000",
+            origin: "http://52.72.47.148:8000",
             methods: ["POST", "GET"]
         }
     });
